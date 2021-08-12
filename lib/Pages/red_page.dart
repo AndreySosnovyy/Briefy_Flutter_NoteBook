@@ -1,8 +1,9 @@
 import 'dart:math';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:random_string/random_string.dart';
+import 'package:briefy/background.dart';
+
+enum PageColor { red, yellow, green }
 
 class RedPage extends StatelessWidget {
   @override
@@ -27,24 +28,28 @@ class RedPage extends StatelessWidget {
         ),
         onPressed: () {},
       ),
-      body: Container(
-        color: Color.fromARGB(255, 255, 200, 200),
-        constraints: BoxConstraints.expand(),
-        child: GlowingOverscrollIndicator(
-          axisDirection: AxisDirection.down,
-          color: Colors.red,
-          child: ListView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.all(6),
-            itemCount: 5,
-            itemBuilder: (BuildContext context, int index) {
-              return noteCard(getRandomTitle(), getRandomText(), [
-                for (var i = 0; i < Random().nextInt(5); i++)
-                  getRandomNetworkImageURI()
-              ]);
-            },
+      body: Stack(
+        children: [
+          AnimatedBackground(PageColor.red),
+          Container(
+            constraints: BoxConstraints.expand(),
+            child: GlowingOverscrollIndicator(
+              axisDirection: AxisDirection.down,
+              color: Colors.red,
+              child: ListView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.all(6),
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  return noteCard(getRandomTitle(), getRandomText(), [
+                    for (var i = 0; i < Random().nextInt(5); i++)
+                      getRandomNetworkImageURI()
+                  ]);
+                },
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -61,18 +66,20 @@ class RedPage extends StatelessWidget {
         children: [
           // ~~~~~~~~~~~ заголовок ~~~~~~~~~~~
           Container(
-            margin: EdgeInsets.all(16),
+            margin: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w500,
+                Flexible(
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
                 IconButton(
                   icon: Icon(
@@ -111,7 +118,7 @@ class RedPage extends StatelessWidget {
           if (text.isNotEmpty)
             // ~~~~~~~~~~~ блок текста ~~~~~~~~~~~
             Container(
-              margin: EdgeInsets.fromLTRB(16, 0, 16, 10),
+              margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
               child: Text(
                 text,
                 style: TextStyle(
@@ -138,7 +145,9 @@ class RedPage extends StatelessWidget {
     var titles = [
       'СРОЧНО!',
       'Сделать до вторника',
+      'Раз два три четыре пять шесть семь восемь девять десять',
       'Задания',
+      'Дни рождения',
       'ОГЭ',
       'Программирование'
     ];
@@ -149,7 +158,7 @@ class RedPage extends StatelessWidget {
     var texts = [
       '''1) Убраться в комнате
 2) Сделать уроки
-3)Полить цветы''',
+3) Полить цветы''',
       '''Мы сидим и смотрим в окна.
 Тучи по небу летят.
 На дворе собаки мокнут,
