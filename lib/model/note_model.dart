@@ -5,13 +5,15 @@
 enum Level { red, yellow, green }
 
 class NoteModel {
-  late Level level;
-  late final String title;
-  late final String text;
-  late final List<String> images;
+  final int id;
+  Level level;
+  final String title;
+  final String text;
+  final List<String> images;
   bool isPinned = false;
 
   NoteModel({
+    required this.id,
     required this.level,
     required this.title,
     required this.text,

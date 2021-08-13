@@ -50,23 +50,20 @@ class NoteCard extends StatelessWidget {
             Container(
               height: 140,
               margin: EdgeInsets.fromLTRB(16, 0, 16, 10),
-              child: GlowingOverscrollIndicator(
-                axisDirection: AxisDirection.right,
-                color: Colors.white,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: note.images.length,
-                  itemBuilder: (BuildContext context, int index) => ClipRRect(
-                    clipBehavior: Clip.antiAlias,
-                    borderRadius: BorderRadius.circular(10),
-                    child: Image.network(
-                      note.images[index],
-                      fit: BoxFit.cover,
-                    ),
+              child: ListView.separated(
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: note.images.length,
+                itemBuilder: (BuildContext context, int index) => ClipRRect(
+                  clipBehavior: Clip.antiAlias,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    note.images[index],
+                    fit: BoxFit.cover,
                   ),
-                  separatorBuilder: (BuildContext context, int index) =>
-                      SizedBox(width: 10),
                 ),
+                separatorBuilder: (BuildContext context, int index) =>
+                    SizedBox(width: 10),
               ),
             ),
           if (note.text.isNotEmpty)
