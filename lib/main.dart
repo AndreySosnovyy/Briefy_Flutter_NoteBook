@@ -1,6 +1,6 @@
 import 'package:briefy/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:briefy/Pages/red_page.dart';
+import 'package:briefy/routes/red_route.dart';
 
 void main() async {
   // await dotenv.load(fileName: '.env');
@@ -14,7 +14,7 @@ class BriefyApp extends StatelessWidget {
       title: Constants.appName,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Roboto'),
-      home: RedPage(),
+      home: RedRoute(),
     );
   }
 }

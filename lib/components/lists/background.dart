@@ -1,7 +1,7 @@
+import 'package:briefy/model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
-import '../model/note_model.dart';
 
 enum AniProps { color1, color2 }
 
