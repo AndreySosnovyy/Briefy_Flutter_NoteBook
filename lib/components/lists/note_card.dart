@@ -13,7 +13,7 @@ class NoteCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
       ),
-      color: Colors.white,
+      color: Colors.grey.shade50,
       elevation: 3,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -32,6 +32,15 @@ class Utils {
     }
   }
 
+  static Level getLevelByIndex(int index) {
+    switch (index) {
+      case 0: return Level.red;
+      case 1: return Level.yellow;
+      case 2: return Level.green;
+      default: throw Exception('Wrong index provided');
+    }
+  }
+
   static Level getNextLevel(Level level) {
     switch (level) {
       case Level.red:

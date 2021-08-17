@@ -1,25 +1,31 @@
 import 'package:briefy/model/note_model.dart';
 import 'package:briefy/routes/add_note_route.dart';
-import 'package:briefy/routes/green_route.dart';
-import 'package:briefy/routes/red_route.dart';
-import 'package:briefy/routes/yellow_route.dart';
 import 'package:briefy/utilities/utils.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart' as Logging;
+import '../../constants.dart';
 
 class CustomNavigationBar extends StatelessWidget {
-  late final Level routeLevel;
-  late final BuildContext context;
+  final Level routeLevel;
+  final BuildContext context;
+  final Function callback;
 
-  CustomNavigationBar(this.routeLevel, this.context);
+  CustomNavigationBar({
+    required this.routeLevel,
+    required this.context,
+    required this.callback,
+  });
 
   @override
   Widget build(BuildContext context) {
+    var logger = Logging.Logger(printer: Logging.PrettyPrinter());
+
     return CurvedNavigationBar(
-      animationDuration: const Duration(milliseconds: 260),
+      animationDuration: const Duration(milliseconds: 240),
       color: Utils.getColorByLevel(routeLevel),
       index: Utils.getIndexByLevel(routeLevel),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade50,
       height: 60,
       onTap: (index) {
         if (index == Utils.getIndexByLevel(routeLevel)) {
@@ -28,25 +34,12 @@ class CustomNavigationBar extends StatelessWidget {
               MaterialPageRoute(
                   builder: (context) => AddNoteRoute(routeLevel)));
         } else {
-          switch (routeLevel) {
-            case Level.red:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => RedRoute()));
-              break;
-            case Level.yellow:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => YellowRoute()));
-              break;
-            case Level.green:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => YellowRoute()));
-              break;
-          }
+          callback(Utils.getLevelByIndex(index));
         }
       },
       items: [
         for (var level in Level.values)
-          if (routeLevel == level)
+          if (level == routeLevel)
             getAddNoteItem(Utils.getColorByLevel(level))
           else
             getDefaultItem(Utils.getColorByLevel(level))
@@ -56,22 +49,40 @@ class CustomNavigationBar extends StatelessWidget {
 
   Widget getDefaultItem(Color color) {
     return Container(
-      height: 36,
-      width: 36,
+      height: 45,
+      width: 45,
       child: DecoratedBox(
-        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+        decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            border: Border.all(width: 5, color: Colors.white)),
       ),
     );
   }
 
   Widget getAddNoteItem(Color color) {
     return Container(
-      height: 36,
-      width: 36,
+      height: 40,
+      width: 40,
       child: DecoratedBox(
-        child: Icon(Icons.add, size: 28, color: Colors.white),
+        child: Icon(Icons.add, size: 32, color: Colors.white),
         decoration: BoxDecoration(shape: BoxShape.circle, color: color),
       ),
     );
   }
+}
+
+class CustomAppBar extends AppBar {
+  final Level level;
+
+  CustomAppBar(this.level)
+      : super(
+          brightness: Brightness.dark,
+          title: Text(
+            Constants.appName,
+            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Utils.getColorByLevel(level),
+        );
 }
