@@ -21,6 +21,17 @@ class Utils {
     }
   }
 
+  static int getIndexByLevel(Level level) {
+    switch (level) {
+      case Level.red:
+        return 0;
+      case Level.yellow:
+        return 1;
+      case Level.green:
+        return 2;
+    }
+  }
+
   static Level getNextLevel(Level level) {
     switch (level) {
       case Level.red:

@@ -1,5 +1,6 @@
 import 'package:briefy/model/note_model.dart';
 import 'package:briefy/routes/add_note_route.dart';
+import 'package:briefy/utilities/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class AddNoteButton extends StatelessWidget {
         width: 56,
         height: 56,
         decoration: BoxDecoration(
-          color: Colors.red,
+          color: Utils.getColorByLevel(level),
           shape: BoxShape.circle,
         ),
         child: Icon(Icons.add, size: 38, color: Colors.white),

@@ -1,3 +1,4 @@
+import 'package:briefy/components/lists/add_note_button.dart';
 import 'package:briefy/components/lists/background.dart';
 import 'package:briefy/components/lists/navigation_bar.dart';
 import 'package:briefy/components/lists/note_list.dart';
@@ -6,15 +7,12 @@ import 'package:briefy/model/note_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class RedRoute extends StatefulWidget {
+class YellowRoute extends StatefulWidget {
   @override
-  _RedRouteState createState() => _RedRouteState();
+  _YellowRouteState createState() => _YellowRouteState();
 }
 
-class _RedRouteState extends State<RedRoute> {
-
-  var level = Level.red;
-
+class _YellowRouteState extends State<YellowRoute> {
   void callback() {
     setState(() => {});
   }
@@ -29,13 +27,14 @@ class _RedRouteState extends State<RedRoute> {
           style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.yellow,
       ),
-      bottomNavigationBar: CustomNavigationBar(level, context),
+      bottomNavigationBar: CustomNavigationBar(Level.yellow, context),
+      floatingActionButton: AddNoteButton(Level.yellow),
       body: Stack(
         children: [
-          AnimatedBackground(level),
-          NoteList(level),
+          AnimatedBackground(Level.yellow),
+          NoteList(Level.yellow),
         ],
       ),
     );

@@ -33,6 +33,7 @@ dependencies:
   simple_animations: ^3.1.1
   supercharged: ^2.0.0
   modal_bottom_sheet: ^2.0.0
+  curved_navigation_bar: ^1.0.1
 
 dev_dependencies:
   flutter_test:
