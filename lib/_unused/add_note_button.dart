@@ -22,7 +22,7 @@ class AddNoteButton extends StatelessWidget {
         width: 56,
         height: 56,
         decoration: BoxDecoration(
-          color: Utils.getColorByLevel(level),
+          color: Utils.getMainColorByLevel(level),
           shape: BoxShape.circle,
         ),
         child: Icon(Icons.add, size: 38, color: Colors.white),

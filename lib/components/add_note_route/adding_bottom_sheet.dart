@@ -28,6 +28,7 @@ class AddingBottomSheet {
                       ),),
                   ),
                 ),
+                // todo: вынести создание плитки в функцию
                 ListTile(
                   leading: Icon(
                     Icons.photo_camera_outlined,
@@ -37,7 +38,9 @@ class AddingBottomSheet {
                     'Сфотографировать',
                     style: TextStyle(fontSize: 18),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
                 ListTile(
                   leading: Icon(
@@ -48,7 +51,9 @@ class AddingBottomSheet {
                     'Добавить из галереи',
                     style: TextStyle(fontSize: 18),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
                 ListTile(
                   leading: Icon(
@@ -59,7 +64,9 @@ class AddingBottomSheet {
                     'Добавить список',
                     style: TextStyle(fontSize: 18),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
                 ListTile(
                   leading: Icon(
@@ -70,7 +77,9 @@ class AddingBottomSheet {
                     'Добавить тег',
                     style: TextStyle(fontSize: 18),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ],
             ),

@@ -25,7 +25,7 @@ class _AppbarActionOvalState extends State<AppbarActionOval> {
 
   @override
   Widget build(BuildContext context) {
-    Color color = Utils.getColorByLevel(widget.level);
+    Color color = Utils.getMainColorByLevel(widget.level);
 
     return InkWell(
       enableFeedback: false,

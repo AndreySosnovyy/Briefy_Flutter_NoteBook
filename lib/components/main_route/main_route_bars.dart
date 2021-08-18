@@ -23,10 +23,10 @@ class CustomNavigationBar extends StatelessWidget {
 
     return CurvedNavigationBar(
       animationDuration: const Duration(milliseconds: 240),
-      color: Utils.getColorByLevel(routeLevel),
+      color: Utils.getMainColorByLevel(routeLevel),
       index: Utils.getIndexByLevel(routeLevel),
-      backgroundColor: Colors.grey.shade50,
-      height: 60,
+      backgroundColor: Utils.getLightColorByLevel(routeLevel),
+      height: 50,
       onTap: (index) {
         if (index == Utils.getIndexByLevel(routeLevel)) {
           Navigator.push(
@@ -40,22 +40,23 @@ class CustomNavigationBar extends StatelessWidget {
       items: [
         for (var level in Level.values)
           if (level == routeLevel)
-            getAddNoteItem(Utils.getColorByLevel(level))
+            getAddNoteItem(Utils.getMainColorByLevel(level))
           else
-            getDefaultItem(Utils.getColorByLevel(level))
+            getDefaultItem(Utils.getMainColorByLevel(level))
       ],
     );
   }
 
   Widget getDefaultItem(Color color) {
     return Container(
-      height: 45,
-      width: 45,
+      height: 40,
+      width: 40,
       child: DecoratedBox(
         decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-            border: Border.all(width: 5, color: Colors.white)),
+          color: color,
+          shape: BoxShape.circle,
+          // border: Border.all(width: 5, color: Colors.white),
+        ),
       ),
     );
   }
@@ -65,8 +66,11 @@ class CustomNavigationBar extends StatelessWidget {
       height: 40,
       width: 40,
       child: DecoratedBox(
-        child: Icon(Icons.add, size: 32, color: Colors.white),
-        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+        child: Icon(Icons.add, size: 36, color: Colors.white),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: color,
+        ),
       ),
     );
   }
@@ -83,6 +87,6 @@ class CustomAppBar extends AppBar {
             style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-          backgroundColor: Utils.getColorByLevel(level),
+          backgroundColor: Utils.getMainColorByLevel(level),
         );
 }

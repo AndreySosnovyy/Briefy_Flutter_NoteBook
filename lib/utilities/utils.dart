@@ -1,3 +1,4 @@
+import 'package:briefy/constants.dart';
 import 'package:briefy/model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,14 +11,25 @@ class Utils {
             SystemUiOverlayStyle(statusBarColor: color)));
   }
 
-  static Color getColorByLevel(Level level) {
+  static Color getMainColorByLevel(Level level) {
     switch (level) {
       case Level.red:
-        return Colors.red;
+        return AppColors.mainRed;
       case Level.yellow:
-        return Colors.yellow;
+        return AppColors.mainYellow;
       case Level.green:
-        return Colors.green;
+        return AppColors.mainGreen;
+    }
+  }
+
+  static Color getLightColorByLevel(Level level) {
+    switch (level) {
+      case Level.red:
+        return AppColors.lightRed;
+      case Level.yellow:
+        return AppColors.lightYellow;
+      case Level.green:
+        return AppColors.lightGreen;
     }
   }
 

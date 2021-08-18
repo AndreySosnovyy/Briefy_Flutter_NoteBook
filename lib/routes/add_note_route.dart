@@ -1,17 +1,20 @@
-import 'package:briefy/components/adding/adding_bottom_sheet.dart';
-import 'package:briefy/components/adding/appbar_action_oval.dart';
+import 'package:briefy/components/add_note_route/adding_bottom_sheet.dart';
+import 'package:briefy/components/add_note_route/appbar_action_oval.dart';
 import 'package:briefy/model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AddNoteRoute extends StatelessWidget {
-  AddNoteRoute(Level level);
-
+  Level level;
   var images = [];
+
+  AddNoteRoute(this.level) {
+    //todo: создавать заметку с id, полученным из базы данных и уровнем
+  }
 
   @override
   Widget build(BuildContext context) {
-    var appbarActionOval = AppbarActionOval(Level.red);
+    var appbarActionOval = AppbarActionOval(level);
     var noteTitleFieldController = TextEditingController();
     var noteTextFieldController = TextEditingController();
 
