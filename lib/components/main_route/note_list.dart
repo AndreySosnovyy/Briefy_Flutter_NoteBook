@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'note_card.dart';
 
 class NoteList extends StatelessWidget {
-  late final Level level;
+  List<NoteModel> notes;
 
-  NoteList(this.level);
+  NoteList(this.notes);
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +24,11 @@ class NoteList extends StatelessWidget {
           // получать данные в список объектов класса NoteModel
           return NoteCard(
             NoteModel(
-              id: index,
-              level: Level.red,
-              title: Data.getRandomTitle(),
-              text: Data.getRandomText(),
-              images: [
-                for (var i = 0; i < Random().nextInt(5); i++)
-                  Data.getRandomNetworkImageURI()
-              ],
+              id: notes[index].id,
+              level: notes[index].level,
+              title: notes[index].title,
+              text: notes[index].text,
+              images: notes[index].images,
             ),
           );
         },

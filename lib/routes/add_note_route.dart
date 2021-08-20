@@ -4,17 +4,24 @@ import 'package:briefy/model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AddNoteRoute extends StatelessWidget {
+class AddNoteRoute extends StatefulWidget {
   Level level;
-  var images = [];
+  late NoteModel note;
 
   AddNoteRoute(this.level) {
-    //todo: создавать заметку с id, полученным из базы данных и уровнем
+    note = NoteModel(id: 0, level: level);
   }
 
   @override
+  _AddNoteRoute createState() => _AddNoteRoute();
+}
+
+class _AddNoteRoute extends State<AddNoteRoute> {
+
+
+  @override
   Widget build(BuildContext context) {
-    var appbarActionOval = AppbarActionOval(level);
+    var appbarActionOval = AppbarActionOval(widget.level);
     var noteTitleFieldController = TextEditingController();
     var noteTextFieldController = TextEditingController();
 
@@ -40,27 +47,27 @@ class AddNoteRoute extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(height: 20),
-          // ~~~~~~~~~~~~~~~~~ блок картинок ~~~~~~~~~~~~~~~~~
-          if (images.isNotEmpty)
-            Container(
-              height: 140,
-              margin: EdgeInsets.fromLTRB(16, 0, 16, 10),
-              child: ListView.separated(
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: images.length,
-                itemBuilder: (BuildContext context, int index) => ClipRRect(
-                  clipBehavior: Clip.antiAlias,
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    images[index],
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                separatorBuilder: (BuildContext context, int index) =>
-                    SizedBox(width: 10),
-              ),
-            ),
+          // todo: ~~~~~~~~~~~~~~~~~ блок картинок ~~~~~~~~~~~~~~~~~
+          // if (widget.note.images.isNotEmpty)
+          //   Container(
+          //     height: 140,
+          //     margin: EdgeInsets.fromLTRB(16, 0, 16, 10),
+          //     child: ListView.separated(
+          //       physics: BouncingScrollPhysics(),
+          //       scrollDirection: Axis.horizontal,
+          //       itemCount: widget.note.images.length,
+          //       itemBuilder: (BuildContext context, int index) => ClipRRect(
+          //         clipBehavior: Clip.antiAlias,
+          //         borderRadius: BorderRadius.circular(10),
+          //         child: Image.network(
+          //           widget.note.images[index],
+          //           fit: BoxFit.cover,
+          //         ),
+          //       ),
+          //       separatorBuilder: (BuildContext context, int index) =>
+          //           SizedBox(width: 10),
+          //     ),
+          //   ),
           // ~~~~~~~~~~~~~~~~~ поле заголовка ~~~~~~~~~~~~~~~~~
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
@@ -125,7 +132,7 @@ class AddNoteRoute extends StatelessWidget {
                 ),
                 onTap: () {
                   FocusScope.of(context).unfocus();
-                  AddingBottomSheet.show(context);
+                  AddingBottomSheet.show(context, widget.note);
                 },
               ),
               Expanded(

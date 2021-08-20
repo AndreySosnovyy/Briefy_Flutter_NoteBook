@@ -1,8 +1,11 @@
 import 'dart:ui';
+import 'package:briefy/model/note_model.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddingBottomSheet {
-  static Future show(BuildContext context) {
+  static Future show(BuildContext context, NoteModel note) {
+    final ImagePicker _picker = ImagePicker();
     return showModalBottomSheet(
         context: context,
         shape: RoundedRectangleBorder(
@@ -25,65 +28,84 @@ class AddingBottomSheet {
                       shape: BoxShape.rectangle,
                       borderRadius: BorderRadius.all(
                         Radius.circular(20),
-                      ),),
+                      ),
+                    ),
                   ),
                 ),
-                // todo: вынести создание плитки в функцию
-                ListTile(
-                  leading: Icon(
-                    Icons.photo_camera_outlined,
-                    color: Colors.grey[700],
-                  ),
-                  title: Text(
-                    'Сфотографировать',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
+                createTile(
+                  context: context,
+                  icon: Icons.photo_camera_outlined,
+                  text: 'Сфотографировать',
+                  function: () async {
+                    final pickedFile = await _picker.pickImage(
+                      source: ImageSource.camera,
+                      imageQuality: 50,
+                    );
+                    if (pickedFile == null) {
+                      return;
+                    } else {
+                      note.images.add(pickedFile);
+                    }
                   },
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.image_outlined,
-                    color: Colors.grey[700],
-                  ),
-                  title: Text(
-                    'Добавить из галереи',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
+                createTile(
+                  context: context,
+                  icon: Icons.image_outlined,
+                  text: 'Добавить из галереи',
+                  function: () async {
+                    final pickedFileList = await _picker.pickMultiImage(
+                      imageQuality: 50,
+                    );
+                    if (pickedFileList == null) {
+                      return;
+                    } else {
+                      note.images.addAll(pickedFileList);
+                    }
                   },
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.list_alt,
-                    color: Colors.grey[700],
-                  ),
-                  title: Text(
-                    'Добавить список',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
+                createTile(
+                  context: context,
+                  icon: Icons.list_alt,
+                  text: 'Добавить список',
+                  function: () {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Еще не готово"),
+                    ));
                   },
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.label_outline,
-                    color: Colors.grey[700],
-                  ),
-                  title: Text(
-                    'Добавить тег',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
+                createTile(
+                  context: context,
+                  icon: Icons.label_outline,
+                  text: 'Добавить тег',
+                  function: () {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Еще не готово"),
+                    ));
                   },
                 ),
               ],
             ),
           ]);
         }).whenComplete(() {});
+  }
+
+  static Widget createTile({required BuildContext context,
+    required IconData icon,
+    required String text,
+    required Function function}) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: Colors.grey[700],
+      ),
+      title: Text(
+        text,
+        style: TextStyle(fontSize: 18),
+      ),
+      onTap: () {
+        function();
+        Navigator.pop(context);
+      },
+    );
   }
 }

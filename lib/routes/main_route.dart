@@ -20,10 +20,11 @@ class _MainRouteState extends State<MainRoute> {
       appBar: CustomAppBar(level),
       body: DecoratedBox(
         decoration: BoxDecoration(color: Colors.grey.shade300),
-        child: NoteList(level),
+        // todo: передавать полученный из базы данных список заметок
+        // child: NoteList(notes),
       ),
       bottomNavigationBar: CustomNavigationBar(
-        routeLevel: level, context: context, callback: changeLevel),
+          routeLevel: level, context: context, callback: changeLevel),
     );
   }
 }

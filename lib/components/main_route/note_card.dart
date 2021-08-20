@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:briefy/model/note_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -57,8 +59,8 @@ class NoteCard extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) => ClipRRect(
                   clipBehavior: Clip.antiAlias,
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(
-                    note.images[index],
+                  child: Image.file(
+                    File(note.images[index].path),
                     fit: BoxFit.cover,
                   ),
                 ),

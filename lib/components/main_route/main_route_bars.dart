@@ -40,14 +40,14 @@ class CustomNavigationBar extends StatelessWidget {
       items: [
         for (var level in Level.values)
           if (level == routeLevel)
-            getAddNoteItem(Utils.getMainColorByLevel(level))
+            createAddNoteItem(Utils.getMainColorByLevel(level))
           else
-            getDefaultItem(Utils.getMainColorByLevel(level))
+            createDefaultItem(Utils.getMainColorByLevel(level))
       ],
     );
   }
 
-  Widget getDefaultItem(Color color) {
+  Widget createDefaultItem(Color color) {
     return Container(
       height: 40,
       width: 40,
@@ -61,7 +61,7 @@ class CustomNavigationBar extends StatelessWidget {
     );
   }
 
-  Widget getAddNoteItem(Color color) {
+  Widget createAddNoteItem(Color color) {
     return Container(
       height: 40,
       width: 40,

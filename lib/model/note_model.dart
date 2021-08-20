@@ -1,6 +1,7 @@
 // todo: переделать images со списка URI (String) на список изображений
 // todo: добавить дедлайн, после которого переносить заметку на уровень выше
 // todo: добавить теги
+import 'package:image_picker/image_picker.dart';
 
 enum Level { red, yellow, green }
 
@@ -12,7 +13,7 @@ class NoteModel {
   bool isPinned = false;
   String title;
   String text;
-  List<String> images;
+  List<XFile> images;
 
   NoteModel({
     required this.id,
