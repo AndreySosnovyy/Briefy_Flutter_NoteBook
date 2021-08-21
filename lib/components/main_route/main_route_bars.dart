@@ -1,5 +1,5 @@
 import 'package:briefy/model/note_model.dart';
-import 'package:briefy/routes/add_note_route.dart';
+import 'package:briefy/routes/edit_note_route.dart';
 import 'package:briefy/utilities/utils.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +7,12 @@ import 'package:logger/logger.dart' as Logging;
 import '../../constants.dart';
 
 class CustomNavigationBar extends StatelessWidget {
-  final Level routeLevel;
+  final Level level;
   final BuildContext context;
   final Function callback;
 
   CustomNavigationBar({
-    required this.routeLevel,
+    required this.level,
     required this.context,
     required this.callback,
   });
@@ -23,23 +23,25 @@ class CustomNavigationBar extends StatelessWidget {
 
     return CurvedNavigationBar(
       animationDuration: const Duration(milliseconds: 240),
-      color: Utils.getMainColorByLevel(routeLevel),
-      index: Utils.getIndexByLevel(routeLevel),
-      backgroundColor: Utils.getLightColorByLevel(routeLevel),
+      color: Utils.getMainColorByLevel(level),
+      index: Utils.getIndexByLevel(level),
+      backgroundColor: Utils.getLightColorByLevel(level),
       height: 50,
       onTap: (index) {
-        if (index == Utils.getIndexByLevel(routeLevel)) {
+        if (index == Utils.getIndexByLevel(level)) {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => AddNoteRoute(routeLevel)));
+                  builder: (context) =>
+                      // todo: переделать создание заметки (брать id из базы данных)
+                      EditNoteRoute(NoteModel.empty(id: 0, level: level))));
         } else {
           callback(Utils.getLevelByIndex(index));
         }
       },
       items: [
         for (var level in Level.values)
-          if (level == routeLevel)
+          if (level == level)
             createAddNoteItem(Utils.getMainColorByLevel(level))
           else
             createDefaultItem(Utils.getMainColorByLevel(level))

@@ -18,17 +18,17 @@ class NoteList extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         shrinkWrap: true,
         padding: EdgeInsets.all(6),
-        itemCount: 5,
+        itemCount: notes.length,
         itemBuilder: (BuildContext context, int index) {
           // todo: переделать создание карточек с класса Data на класс DBHandler:
           // получать данные в список объектов класса NoteModel
           return NoteCard(
-            NoteModel(
+            NoteModel.empty(
               id: notes[index].id,
               level: notes[index].level,
-              title: notes[index].title,
-              text: notes[index].text,
-              images: notes[index].images,
+              // title: notes[index].title,
+              // text: notes[index].text,
+              // images: notes[index].images,
             ),
           );
         },

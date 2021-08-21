@@ -1,27 +1,32 @@
-import 'package:briefy/components/add_note_route/adding_bottom_sheet.dart';
-import 'package:briefy/components/add_note_route/appbar_action_oval.dart';
+import 'dart:io';
+
+import 'package:briefy/components/edit_note_route/edit_bottom_sheet.dart';
+import 'package:briefy/components/edit_note_route/appbar_action_oval.dart';
 import 'package:briefy/model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AddNoteRoute extends StatefulWidget {
-  Level level;
-  late NoteModel note;
+class EditNoteRoute extends StatefulWidget {
+  final NoteModel note;
 
-  AddNoteRoute(this.level) {
-    note = NoteModel(id: 0, level: level);
+  EditNoteRoute(this.note) {}
+
+  @override
+  _EditNoteRoute createState() => _EditNoteRoute();
+}
+
+class _EditNoteRoute extends State<EditNoteRoute> {
+  _update() {
+    setState(() {});
+  }
+
+  _addImage(File image) {
+    widget.note.images.add(image);
   }
 
   @override
-  _AddNoteRoute createState() => _AddNoteRoute();
-}
-
-class _AddNoteRoute extends State<AddNoteRoute> {
-
-
-  @override
   Widget build(BuildContext context) {
-    var appbarActionOval = AppbarActionOval(widget.level);
+    var appbarActionOval = AppbarActionOval(widget.note.level);
     var noteTitleFieldController = TextEditingController();
     var noteTextFieldController = TextEditingController();
 
@@ -47,27 +52,27 @@ class _AddNoteRoute extends State<AddNoteRoute> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          // todo: ~~~~~~~~~~~~~~~~~ блок картинок ~~~~~~~~~~~~~~~~~
-          // if (widget.note.images.isNotEmpty)
-          //   Container(
-          //     height: 140,
-          //     margin: EdgeInsets.fromLTRB(16, 0, 16, 10),
-          //     child: ListView.separated(
-          //       physics: BouncingScrollPhysics(),
-          //       scrollDirection: Axis.horizontal,
-          //       itemCount: widget.note.images.length,
-          //       itemBuilder: (BuildContext context, int index) => ClipRRect(
-          //         clipBehavior: Clip.antiAlias,
-          //         borderRadius: BorderRadius.circular(10),
-          //         child: Image.network(
-          //           widget.note.images[index],
-          //           fit: BoxFit.cover,
-          //         ),
-          //       ),
-          //       separatorBuilder: (BuildContext context, int index) =>
-          //           SizedBox(width: 10),
-          //     ),
-          //   ),
+          // ~~~~~~~~~~~~~~~~~ блок картинок ~~~~~~~~~~~~~~~~~
+          if (widget.note.images.isNotEmpty)
+            Container(
+              height: 140,
+              margin: EdgeInsets.fromLTRB(16, 0, 16, 10),
+              child: ListView.separated(
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: widget.note.images.length,
+                itemBuilder: (BuildContext context, int index) => ClipRRect(
+                  clipBehavior: Clip.antiAlias,
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.file(
+                    widget.note.images[index],
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                separatorBuilder: (BuildContext context, int index) =>
+                    SizedBox(width: 10),
+              ),
+            ),
           // ~~~~~~~~~~~~~~~~~ поле заголовка ~~~~~~~~~~~~~~~~~
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
@@ -112,7 +117,7 @@ class _AddNoteRoute extends State<AddNoteRoute> {
             ),
           ),
           // ~~~~~~~~~~~~~~~~~ панель тегов ~~~~~~~~~~~~~~~~~
-          // todo: добавить теги (на pub.dev найти пакет для тегов)
+          // добавить теги (pub.dev)
           // ~~~~~~~~~~~~~~~~~ нижняя панель ~~~~~~~~~~~~~~~~~
           Row(
             children: [
@@ -132,7 +137,8 @@ class _AddNoteRoute extends State<AddNoteRoute> {
                 ),
                 onTap: () {
                   FocusScope.of(context).unfocus();
-                  AddingBottomSheet.show(context, widget.note);
+                  AddingBottomSheet.show(
+                      context: context, addImage: _addImage, update: _update);
                 },
               ),
               Expanded(

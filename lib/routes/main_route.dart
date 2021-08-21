@@ -24,7 +24,7 @@ class _MainRouteState extends State<MainRoute> {
         // child: NoteList(notes),
       ),
       bottomNavigationBar: CustomNavigationBar(
-          routeLevel: level, context: context, callback: changeLevel),
+          level: level, context: context, callback: changeLevel),
     );
   }
 }

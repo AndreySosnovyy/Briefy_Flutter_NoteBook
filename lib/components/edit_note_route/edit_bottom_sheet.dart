@@ -1,10 +1,13 @@
-import 'dart:ui';
+import 'dart:io';
 import 'package:briefy/model/note_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddingBottomSheet {
-  static Future show(BuildContext context, NoteModel note) {
+  static Future show(
+      {required BuildContext context,
+      required Function addImage,
+      required Function update}) {
     final ImagePicker _picker = ImagePicker();
     return showModalBottomSheet(
         context: context,
@@ -44,7 +47,8 @@ class AddingBottomSheet {
                     if (pickedFile == null) {
                       return;
                     } else {
-                      note.images.add(pickedFile);
+                      addImage(File(pickedFile.path));
+                      update();
                     }
                   },
                 ),
@@ -59,7 +63,10 @@ class AddingBottomSheet {
                     if (pickedFileList == null) {
                       return;
                     } else {
-                      note.images.addAll(pickedFileList);
+                      pickedFileList.forEach((xFile) {
+                        addImage(File(xFile.path));
+                      });
+                      update();
                     }
                   },
                 ),
@@ -67,21 +74,13 @@ class AddingBottomSheet {
                   context: context,
                   icon: Icons.list_alt,
                   text: 'Добавить список',
-                  function: () {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Еще не готово"),
-                    ));
-                  },
+                  function: () {},
                 ),
                 createTile(
                   context: context,
                   icon: Icons.label_outline,
                   text: 'Добавить тег',
-                  function: () {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Еще не готово"),
-                    ));
-                  },
+                  function: () {},
                 ),
               ],
             ),
@@ -89,10 +88,11 @@ class AddingBottomSheet {
         }).whenComplete(() {});
   }
 
-  static Widget createTile({required BuildContext context,
-    required IconData icon,
-    required String text,
-    required Function function}) {
+  static Widget createTile(
+      {required BuildContext context,
+      required IconData icon,
+      required String text,
+      required Function function}) {
     return ListTile(
       leading: Icon(
         icon,
