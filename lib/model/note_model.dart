@@ -1,4 +1,3 @@
-// todo: переделать images со списка URI (String) на список изображений
 // todo: добавить дедлайн, после которого переносить заметку на уровень выше
 // todo: добавить теги
 import 'dart:io';
@@ -14,6 +13,8 @@ class NoteModel {
   String title = '';
   String text = '';
   List<File> images = [];
+  DateTime created = DateTime.now();
+  DateTime edited = DateTime.now();
 
   NoteModel({
     required this.id,
