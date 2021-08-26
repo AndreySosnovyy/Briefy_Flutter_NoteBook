@@ -1,12 +1,10 @@
-import 'dart:math';
-import 'package:briefy/model/note_model.dart';
-import 'package:briefy/utilities/data.dart';
+import 'package:briefy/model/note.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'note_card.dart';
 
 class NoteList extends StatelessWidget {
-  List<NoteModel> notes;
+  List<Note> notes;
 
   NoteList(this.notes);
 
@@ -23,7 +21,7 @@ class NoteList extends StatelessWidget {
           // todo: переделать создание карточек с класса Data на класс DBHandler:
           // получать данные в список объектов класса NoteModel
           return NoteCard(
-            NoteModel.empty(
+            Note.empty(
               id: notes[index].id,
               level: notes[index].level,
               // title: notes[index].title,

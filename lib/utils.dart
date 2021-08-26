@@ -1,9 +1,8 @@
 import 'package:briefy/constants.dart';
-import 'package:briefy/model/note_model.dart';
+import 'package:briefy/model/note.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:timezone/data/latest.dart' as tz;
 
 class Utils {
   static void setStatusBarColor(Color color) {
@@ -91,12 +90,15 @@ class Utils {
     final yesterday = DateTime(now.year, now.month, now.day - 1);
     final ymdEdited = DateTime(edited.year, edited.month, edited.day);
 
+    final DateFormat formatter = DateFormat('HH:mm');
+    final String formatted = formatter.format(edited);
+
     if (ymdEdited == today) {
-      return 'сегодня в ${edited.hour}:${edited.minute}';
+      return 'сегодня в $formatted';
     } else if (ymdEdited == yesterday) {
-      return 'вчера в ${edited.hour}:${edited.minute}';
+      return 'вчера в $formatted';
     } else {
-      return '${edited.day} ${getMonthByNumber(edited.month)} в ${edited.hour}:${edited.minute}';
+      return '${edited.day} ${getMonthByNumber(edited.month)} в $formatted';
     }
   }
 }

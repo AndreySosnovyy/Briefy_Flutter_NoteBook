@@ -1,5 +1,5 @@
 import 'dart:ui';
-import 'package:briefy/model/note_model.dart';
+import 'package:briefy/model/note.dart';
 import 'package:flutter/material.dart';
 
 class AddingNoteForm {

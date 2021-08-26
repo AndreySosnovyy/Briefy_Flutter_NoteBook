@@ -1,4 +1,4 @@
-// import 'package:briefy/model/note_model.dart';
+// import 'package:briefy/model/note.dart';
 // import 'package:briefy/routes/edit_note_route.dart';
 // import 'package:briefy/utilities/utils.dart';
 // import 'package:flutter/cupertino.dart';

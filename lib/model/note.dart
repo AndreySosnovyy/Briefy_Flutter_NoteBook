@@ -1,22 +1,44 @@
-// todo: добавить дедлайн, после которого переносить заметку на уровень выше
-// todo: добавить теги
 import 'dart:io';
 
-enum Level { red, yellow, green }
+import 'package:hive_flutter/hive_flutter.dart';
+
+part 'note.g.dart';
+
+// todo: добавить дедлайн, после которого переносить заметку на уровень выше
+// todo: добавить теги
+
+@HiveType(typeId: 1)
+enum Level {
+  @HiveField(0)
+  red,
+  @HiveField(1)
+  yellow,
+  @HiveField(2)
+  green
+}
 
 class NoTitleException {}
 
-class NoteModel {
+@HiveType(typeId: 0)
+class Note extends HiveObject {
+  @HiveField(0)
   final int id;
+  @HiveField(1)
   Level level;
+  @HiveField(2)
   bool isPinned = false;
+  @HiveField(3)
   String title = '';
+  @HiveField(4)
   String text = '';
+  @HiveField(5)
   List<File> images = [];
+  @HiveField(6)
   DateTime created = DateTime.now();
+  @HiveField(7)
   DateTime edited = DateTime.now();
 
-  NoteModel({
+  Note({
     required this.id,
     required this.level,
     required this.title,
@@ -24,19 +46,22 @@ class NoteModel {
     required this.images,
   });
 
-  NoteModel.empty({
+  Note.empty({
     required this.id,
     required this.level,
   });
 
   @override
   String toString() {
-    return '''id: $id
-    level: $level
-    is pinned: $isPinned
-    title: $title
-    text: $text
-    number of images: ${images.length}''';
+    return '''
+id: $id
+level: $level
+is pinned: $isPinned
+title: $title
+text: $text
+number of images: ${images.length}
+edited: ${edited.toString()}
+created: ${created.toString()}''';
   }
 
   void validate() {

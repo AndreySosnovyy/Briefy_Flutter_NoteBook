@@ -1,6 +1,6 @@
 import 'package:briefy/components/main_route/main_route_bars.dart';
 import 'package:briefy/components/main_route/note_list.dart';
-import 'package:briefy/model/note_model.dart';
+import 'package:briefy/model/note.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

@@ -1,5 +1,5 @@
-import 'package:briefy/model/note_model.dart';
-import 'package:briefy/utilities/utils.dart';
+import 'package:briefy/model/note.dart';
+import 'package:briefy/utils.dart';
 import 'package:flutter/material.dart';
 
 class AppbarActionOval extends StatefulWidget {

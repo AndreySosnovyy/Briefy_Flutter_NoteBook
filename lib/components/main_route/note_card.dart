@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:briefy/model/note_model.dart';
+import 'package:briefy/model/note.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NoteCard extends StatelessWidget {
-  late final NoteModel note;
+  late final Note note;
 
   NoteCard(this.note);
 

@@ -1,9 +1,9 @@
-import 'package:briefy/model/note_model.dart';
+import 'package:briefy/db_handler.dart';
+import 'package:briefy/model/note.dart';
 import 'package:briefy/routes/edit_note_route.dart';
-import 'package:briefy/utilities/utils.dart';
+import 'package:briefy/utils.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart' as Logging;
 import '../../constants.dart';
 
 class CustomNavigationBar extends StatelessWidget {
@@ -19,8 +19,6 @@ class CustomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var logger = Logging.Logger(printer: Logging.PrettyPrinter());
-
     return CurvedNavigationBar(
       animationDuration: const Duration(milliseconds: 240),
       color: Utils.getMainColorByLevel(level),
@@ -29,12 +27,15 @@ class CustomNavigationBar extends StatelessWidget {
       height: 50,
       onTap: (index) {
         if (index == Utils.getIndexByLevel(level)) {
+          var dbHandler = DBHandler();
+          var id = dbHandler.getNewId();
+          dbHandler.addNote(Note.empty(id: id, level: level));
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      // todo: переделать создание заметки (брать id из базы данных)
-                      EditNoteRoute(NoteModel.empty(id: 0, level: level))));
+            context,
+            MaterialPageRoute(
+              builder: (context) => EditNoteRoute(id),
+            ),
+          );
         } else {
           callback(Utils.getLevelByIndex(index));
         }
