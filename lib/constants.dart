@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Constants {
   static const String appName = 'Briefy';
+  static const String notesBoxName = 'notes';
 }
 
 class AppColors {

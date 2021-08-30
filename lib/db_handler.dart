@@ -1,14 +1,15 @@
 import 'package:hive/hive.dart';
+import 'constants.dart';
 import 'model/note.dart';
 
 class DBHandler {
   static final DBHandler _instance = DBHandler._internal();
 
-  DBHandler._internal();
-
   factory DBHandler() => _instance;
 
-  var noteBox = Hive.box<Note>('notes');
+  Box<Note> noteBox = Hive.box<Note>(Constants.notesBoxName);
+
+  DBHandler._internal();
 
   int getNewId() {
     var id = 0;
@@ -20,7 +21,7 @@ class DBHandler {
     return id;
   }
 
-  void addNote(Note note) => noteBox.add(note);
+  Future<void> addNote(Note note) => noteBox.add(note);
 
   Note getNoteById(int id) {
     try {
@@ -37,4 +38,6 @@ class DBHandler {
       return noteBox.values.toList();
     }
   }
+
+  Future<void> clearNotesBox() async => await noteBox.clear();
 }

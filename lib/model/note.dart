@@ -28,11 +28,13 @@ class Note extends HiveObject {
   @HiveField(2)
   bool isPinned = false;
   @HiveField(3)
-  String title = '';
+  String title = 'Новая заметка';
   @HiveField(4)
   String text = '';
   @HiveField(5)
   List<File> images = [];
+  // todo: Unhandled Exception: HiveError: Cannot write, unknown type: _File.
+  // Did you forget to register an adapter?
   @HiveField(6)
   DateTime created = DateTime.now();
   @HiveField(7)
@@ -53,15 +55,15 @@ class Note extends HiveObject {
 
   @override
   String toString() {
-    return '''
-id: $id
+    return '''id: $id
 level: $level
 is pinned: $isPinned
 title: $title
 text: $text
 number of images: ${images.length}
 edited: ${edited.toString()}
-created: ${created.toString()}''';
+created: ${created.toString()}
+''';
   }
 
   void validate() {

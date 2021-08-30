@@ -9,12 +9,14 @@ import '../../constants.dart';
 class CustomNavigationBar extends StatelessWidget {
   final Level level;
   final BuildContext context;
-  final Function callback;
+  final Function changeLevel;
+  final Function updateNotesList;
 
   CustomNavigationBar({
     required this.level,
     required this.context,
-    required this.callback,
+    required this.changeLevel,
+    required this.updateNotesList,
   });
 
   @override
@@ -25,19 +27,19 @@ class CustomNavigationBar extends StatelessWidget {
       index: Utils.getIndexByLevel(level),
       backgroundColor: Utils.getLightColorByLevel(level),
       height: 50,
-      onTap: (index) {
+      onTap: (index) async {
         if (index == Utils.getIndexByLevel(level)) {
           var dbHandler = DBHandler();
           var id = dbHandler.getNewId();
-          dbHandler.addNote(Note.empty(id: id, level: level));
+          await dbHandler.addNote(Note.empty(id: id, level: level));
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EditNoteRoute(id),
+              builder: (context) => EditNoteRoute(id, updateNotesList),
             ),
           );
         } else {
-          callback(Utils.getLevelByIndex(index));
+          changeLevel(Utils.getLevelByIndex(index));
         }
       },
       items: [
@@ -82,13 +84,26 @@ class CustomNavigationBar extends StatelessWidget {
 class CustomAppBar extends AppBar {
   final Level level;
 
-  CustomAppBar(this.level)
+  CustomAppBar(this.level, List<Function> menuFunctions)
       : super(
           brightness: Brightness.dark,
           title: Text(
             Constants.appName,
             style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
           ),
+          actions: [
+            PopupMenuButton(
+                icon: Icon(Icons.more_vert),
+                onSelected: (int value) {
+                  menuFunctions[value]();
+                },
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Text("Удалить все заметки"),
+                        value: 0,
+                      ),
+                    ])
+          ],
           centerTitle: true,
           backgroundColor: Utils.getMainColorByLevel(level),
         );

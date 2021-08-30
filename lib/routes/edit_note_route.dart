@@ -9,9 +9,11 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart' as Logging;
 
 class EditNoteRoute extends StatefulWidget {
+  final dbHandler = DBHandler();
   late final Note note;
+  late final Function updateNotesList;
 
-  EditNoteRoute(int id) {
+  EditNoteRoute(int id, this.updateNotesList) {
     note = DBHandler().getNoteById(id);
   }
 
@@ -32,8 +34,8 @@ class _EditNoteRoute extends State<EditNoteRoute> {
   void dispose() {
     _updateEditedTime();
     widget.note.save();
-    logger.d(widget.note);
     super.dispose();
+    widget.updateNotesList();
   }
 
   @override
