@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:briefy/constants.dart';
 import 'package:briefy/model/note.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +9,11 @@ import 'package:path_provider/path_provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Hive.init((await getApplicationDocumentsDirectory()).path);
+  var docPath = (await getApplicationDocumentsDirectory()).path;
+  if (!(await Directory(docPath + '/images').exists())) {
+    await Directory(docPath + '/images').create();
+  }
+  Hive.init(docPath);
   Hive.registerAdapter<Level>(LevelAdapter());
   Hive.registerAdapter<Note>(NoteAdapter());
   await Hive.openBox<Note>(Constants.notesBoxName);

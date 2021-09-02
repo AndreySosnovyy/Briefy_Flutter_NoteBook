@@ -60,7 +60,7 @@ class NoteCard extends StatelessWidget {
                   clipBehavior: Clip.antiAlias,
                   borderRadius: BorderRadius.circular(10),
                   child: Image.file(
-                    File(note.images[index].path),
+                    File(note.images[index]),
                     fit: BoxFit.cover,
                   ),
                 ),

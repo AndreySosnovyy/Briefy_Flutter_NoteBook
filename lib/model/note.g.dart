@@ -65,7 +65,7 @@ class NoteAdapter extends TypeAdapter<Note> {
       level: fields[1] as Level,
       title: fields[3] as String,
       text: fields[4] as String,
-      images: (fields[5] as List).cast<File>(),
+      images: (fields[8] as List).cast<String>(),
     )
       ..isPinned = fields[2] as bool
       ..created = fields[6] as DateTime
@@ -86,7 +86,7 @@ class NoteAdapter extends TypeAdapter<Note> {
       ..write(obj.title)
       ..writeByte(4)
       ..write(obj.text)
-      ..writeByte(5)
+      ..writeByte(8)
       ..write(obj.images)
       ..writeByte(6)
       ..write(obj.created)

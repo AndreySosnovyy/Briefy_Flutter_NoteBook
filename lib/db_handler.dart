@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'constants.dart';
 import 'model/note.dart';
 
@@ -39,5 +42,17 @@ class DBHandler {
     }
   }
 
-  Future<void> clearNotesBox() async => await noteBox.clear();
+  Future<void> deleteNote(int id) async {
+    noteBox.values.forEach((note) {
+      if (note.id == id) {
+        note.delete();
+      }
+    });
+  }
+
+  Future<void> clearNotesBox() async {
+    var docPath = (await getApplicationDocumentsDirectory()).path;
+    Directory(docPath + '/images').list().forEach((image) => image.delete());
+    await noteBox.clear();
+  }
 }

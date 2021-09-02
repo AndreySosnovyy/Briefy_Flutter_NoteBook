@@ -31,10 +31,8 @@ class Note extends HiveObject {
   String title = 'Новая заметка';
   @HiveField(4)
   String text = '';
-  @HiveField(5)
-  List<File> images = [];
-  // todo: Unhandled Exception: HiveError: Cannot write, unknown type: _File.
-  // Did you forget to register an adapter?
+  @HiveField(8)
+  List<String> images = [];
   @HiveField(6)
   DateTime created = DateTime.now();
   @HiveField(7)

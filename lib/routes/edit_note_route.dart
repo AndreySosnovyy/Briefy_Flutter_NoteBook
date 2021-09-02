@@ -7,6 +7,7 @@ import 'package:briefy/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart' as Logging;
+import 'package:path_provider/path_provider.dart';
 
 class EditNoteRoute extends StatefulWidget {
   final dbHandler = DBHandler();
@@ -24,9 +25,17 @@ class EditNoteRoute extends StatefulWidget {
 class _EditNoteRoute extends State<EditNoteRoute> {
   var logger = Logging.Logger(printer: Logging.PrettyPrinter());
 
-  void _update() => setState(() {});
+  void _update() {
+    Future.delayed(Duration(milliseconds: 5), () => setState(() {}));
+  }
 
-  void _addImage(File image) => widget.note.images.add(image);
+  void _addImage(File image) async {
+    var docPath = (await getApplicationDocumentsDirectory()).path;
+    var newPath = docPath + '/images/${image.path.split('/').last}';
+    widget.note.images.add(newPath);
+    image.copy(newPath);
+    image.delete();
+  }
 
   void _updateEditedTime() => widget.note.edited = DateTime.now();
 
@@ -79,7 +88,7 @@ class _EditNoteRoute extends State<EditNoteRoute> {
                   clipBehavior: Clip.antiAlias,
                   borderRadius: BorderRadius.circular(10),
                   child: Image.file(
-                    widget.note.images[index],
+                    File(widget.note.images[index]),
                     fit: BoxFit.cover,
                   ),
                 ),

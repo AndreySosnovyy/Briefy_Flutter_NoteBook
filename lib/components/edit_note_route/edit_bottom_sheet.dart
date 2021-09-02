@@ -41,7 +41,6 @@ class AddingBottomSheet {
                   function: () async {
                     final pickedFile = await _picker.pickImage(
                       source: ImageSource.camera,
-                      imageQuality: 50,
                     );
                     if (pickedFile == null) {
                       return;
@@ -56,9 +55,7 @@ class AddingBottomSheet {
                   icon: Icons.image_outlined,
                   text: 'Добавить из галереи',
                   function: () async {
-                    final pickedFileList = await _picker.pickMultiImage(
-                      imageQuality: 50,
-                    );
+                    final pickedFileList = await _picker.pickMultiImage();
                     if (pickedFileList == null) {
                       return;
                     } else {

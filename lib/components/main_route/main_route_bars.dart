@@ -27,6 +27,13 @@ class CustomNavigationBar extends StatelessWidget {
       index: Utils.getIndexByLevel(level),
       backgroundColor: Utils.getLightColorByLevel(level),
       height: 50,
+      items: [
+        for (var _level in Level.values)
+          if (_level == level)
+            createAddNoteItem(Utils.getMainColorByLevel(_level))
+          else
+            createDefaultItem(Utils.getMainColorByLevel(_level))
+      ],
       onTap: (index) async {
         if (index == Utils.getIndexByLevel(level)) {
           var dbHandler = DBHandler();
@@ -42,13 +49,6 @@ class CustomNavigationBar extends StatelessWidget {
           changeLevel(Utils.getLevelByIndex(index));
         }
       },
-      items: [
-        for (var level in Level.values)
-          if (level == level)
-            createAddNoteItem(Utils.getMainColorByLevel(level))
-          else
-            createDefaultItem(Utils.getMainColorByLevel(level))
-      ],
     );
   }
 

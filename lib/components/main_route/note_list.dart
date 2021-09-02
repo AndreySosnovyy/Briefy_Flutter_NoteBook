@@ -18,17 +18,7 @@ class NoteList extends StatelessWidget {
         padding: EdgeInsets.all(6),
         itemCount: notes.length,
         itemBuilder: (BuildContext context, int index) {
-          // todo: переделать создание карточек с класса Data на класс DBHandler:
-          // получать данные в список объектов класса NoteModel
-          return NoteCard(
-            Note.empty(
-              id: notes[index].id,
-              level: notes[index].level,
-              // title: notes[index].title,
-              // text: notes[index].text,
-              // images: notes[index].images,
-            ),
-          );
+          return NoteCard(notes[index]);
         },
       ),
     );

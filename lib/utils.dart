@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:briefy/constants.dart';
 import 'package:briefy/model/note.dart';
 import 'package:flutter/material.dart';
@@ -99,6 +101,15 @@ class Utils {
       return 'вчера в $formatted';
     } else {
       return '${edited.day} ${getMonthByNumber(edited.month)} в $formatted';
+    }
+  }
+
+  static Future<File> moveFile(File sourceFile, String newPath) async {
+    try {
+      return await sourceFile.rename(newPath);
+    } catch (e) {
+      final newFile = await sourceFile.copy(newPath);
+      return newFile;
     }
   }
 }
