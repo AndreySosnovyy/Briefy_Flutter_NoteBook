@@ -5,8 +5,9 @@ import 'note_card.dart';
 
 class NoteList extends StatelessWidget {
   List<Note> notes;
+  Function update;
 
-  NoteList(this.notes);
+  NoteList(this.notes, this.update);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class NoteList extends StatelessWidget {
         padding: EdgeInsets.all(6),
         itemCount: notes.length,
         itemBuilder: (BuildContext context, int index) {
-          return NoteCard(notes[index]);
+          return NoteCard(notes[index], update);
         },
       ),
     );

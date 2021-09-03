@@ -1,13 +1,15 @@
 import 'dart:io';
 
+import 'package:briefy/db_handler.dart';
 import 'package:briefy/model/note.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NoteCard extends StatelessWidget {
-  late final Note note;
+  final Note note;
+  Function update;
 
-  NoteCard(this.note);
+  NoteCard(this.note, this.update);
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +39,29 @@ class NoteCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.more_vert,
-                    color: Colors.black54,
-                  ),
-                  onPressed: () => {},
-                )
+                PopupMenuButton(
+                    icon: Icon(Icons.more_vert, color: Colors.black54),
+                    onSelected: (int value) async {
+                      switch (value) {
+                        case 0:
+                        // todo: удалять заметку с анимацией
+                          await DBHandler().deleteNote(note.id);
+                          update();
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete_outline, color: Colors.black),
+                                SizedBox(width: 6),
+                                Text("Удалить заметку"),
+                              ],
+                            ),
+                            value: 0,
+                          ),
+                        ]),
               ],
             ),
           ),

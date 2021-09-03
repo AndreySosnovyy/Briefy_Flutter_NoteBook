@@ -45,7 +45,7 @@ class AddingBottomSheet {
                     if (pickedFile == null) {
                       return;
                     } else {
-                      addImage(File(pickedFile.path));
+                      await addImage(File(pickedFile.path));
                       update();
                     }
                   },
@@ -59,8 +59,8 @@ class AddingBottomSheet {
                     if (pickedFileList == null) {
                       return;
                     } else {
-                      pickedFileList.forEach((xFile) {
-                        addImage(File(xFile.path));
+                      pickedFileList.forEach((xFile) async {
+                        await addImage(File(xFile.path));
                       });
                       update();
                     }

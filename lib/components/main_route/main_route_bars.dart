@@ -99,7 +99,13 @@ class CustomAppBar extends AppBar {
                 },
                 itemBuilder: (context) => [
                       PopupMenuItem(
-                        child: Text("Удалить все заметки"),
+                        child: Row(
+                          children: [
+                            Icon(Icons.delete_outline, color: Colors.black),
+                            SizedBox(width: 6),
+                            Text("Удалить все заметки"),
+                          ],
+                        ),
                         value: 0,
                       ),
                     ])

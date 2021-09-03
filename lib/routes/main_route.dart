@@ -42,7 +42,7 @@ class _MainRouteState extends State<MainRoute> {
       appBar: CustomAppBar(widget.level, [_clearNotesBox]),
       body: DecoratedBox(
         decoration: BoxDecoration(color: Colors.grey.shade100),
-        child: NoteList(widget.notes),
+        child: NoteList(widget.notes, _updateNotesList),
       ),
       bottomNavigationBar: CustomNavigationBar(
         level: widget.level,
