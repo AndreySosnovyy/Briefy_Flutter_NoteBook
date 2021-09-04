@@ -23,10 +23,10 @@ class EditNoteRoute extends StatefulWidget {
 }
 
 class _EditNoteRoute extends State<EditNoteRoute> {
-  var logger = Logging.Logger(printer: Logging.PrettyPrinter());
+  // var logger = Logging.Logger(printer: Logging.PrettyPrinter());
 
   void _update() {
-    Future.delayed(Duration(milliseconds: 5), () => setState(() {}));
+    Future.delayed(Duration(milliseconds: 1), () => setState(() {}));
   }
 
   void _addImage(File image) async {
@@ -39,6 +39,12 @@ class _EditNoteRoute extends State<EditNoteRoute> {
 
   void _updateEditedTime() => widget.note.edited = DateTime.now();
 
+  void _updateNoteLevel() => widget.note.level = appbarActionOval.getLevel();
+
+  var appbarActionOval = AppbarActionOval();
+  var noteTitleFieldController = TextEditingController();
+  var noteTextFieldController = TextEditingController();
+
   @override
   void dispose() {
     _updateEditedTime();
@@ -49,10 +55,8 @@ class _EditNoteRoute extends State<EditNoteRoute> {
 
   @override
   Widget build(BuildContext context) {
-    var appbarActionOval = AppbarActionOval(widget.note.level);
-    var noteTitleFieldController = TextEditingController();
-    var noteTextFieldController = TextEditingController();
-
+    appbarActionOval.level = widget.note.level;
+    appbarActionOval.updateLevel = _updateNoteLevel;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

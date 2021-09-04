@@ -3,9 +3,8 @@ import 'package:briefy/utils.dart';
 import 'package:flutter/material.dart';
 
 class AppbarActionOval extends StatefulWidget {
-  Level level;
-
-  AppbarActionOval(this.level);
+  var level = Level.red;
+  Function updateLevel = () {};
 
   Level getLevel() {
     return level;
@@ -18,9 +17,7 @@ class AppbarActionOval extends StatefulWidget {
 class _AppbarActionOvalState extends State<AppbarActionOval> {
 
   void setNextColor() {
-    setState(() {
-      widget.level = Utils.getNextLevel(widget.level);
-    });
+    setState(() => widget.level = Utils.getNextLevel(widget.level));
   }
 
   @override
@@ -30,7 +27,10 @@ class _AppbarActionOvalState extends State<AppbarActionOval> {
     return InkWell(
       enableFeedback: false,
       splashFactory: NoSplash.splashFactory,
-      onTap: () => setNextColor(),
+      onTap: () {
+        setNextColor();
+        widget.updateLevel();
+      },
       child: Center(
         child: Container(
           height: 28,

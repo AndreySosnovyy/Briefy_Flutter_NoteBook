@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:hive_flutter/hive_flutter.dart';
 
 part 'note.g.dart';
@@ -62,11 +60,5 @@ number of images: ${images.length}
 edited: ${edited.toString()}
 created: ${created.toString()}
 ''';
-  }
-
-  void validate() {
-    if (title.isEmpty) {
-      throw NoTitleException();
-    }
   }
 }
