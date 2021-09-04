@@ -41,6 +41,10 @@ class _EditNoteRoute extends State<EditNoteRoute> {
 
   void _updateNoteLevel() => widget.note.level = appbarActionOval.getLevel();
 
+  void _updateTitle(String title) => widget.note.title = title.trimRight();
+
+  void _updateText(String text) => widget.note.text = text;
+
   var appbarActionOval = AppbarActionOval();
   var noteTitleFieldController = TextEditingController();
   var noteTextFieldController = TextEditingController();
@@ -105,6 +109,7 @@ class _EditNoteRoute extends State<EditNoteRoute> {
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: TextField(
               controller: noteTitleFieldController,
+              onChanged: (text) => _updateTitle(text),
               maxLength: 128,
               style: TextStyle(
                 fontSize: 22,
@@ -128,6 +133,7 @@ class _EditNoteRoute extends State<EditNoteRoute> {
                 behavior: NoGlowBehavior(),
                 child: TextField(
                   controller: noteTextFieldController,
+                  onChanged: (text) => _updateText(text),
                   maxLength: 2000,
                   style: TextStyle(
                     fontSize: 20,
