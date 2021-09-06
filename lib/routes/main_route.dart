@@ -5,6 +5,8 @@ import 'package:briefy/model/note.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'edit_note_route.dart';
+
 class MainRoute extends StatefulWidget {
   final dbHandler = DBHandler();
   var level = Level.red;
@@ -26,6 +28,18 @@ class _MainRouteState extends State<MainRoute> {
             () => widget.notes = widget.dbHandler.getNotes(widget.level)));
   }
 
+  void _onNoteTap(int id) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditNoteRoute(
+            id: id,
+            pageType: PageType.editNote,
+            updateNotesList: _updateNotesList),
+      ),
+    );
+  }
+
   void _changeLevel(Level level) {
     widget.level = level;
     setState(() => widget.notes = widget.dbHandler.getNotes(widget.level));
@@ -42,7 +56,11 @@ class _MainRouteState extends State<MainRoute> {
       appBar: CustomAppBar(widget.level, [_clearNotesBox]),
       body: DecoratedBox(
         decoration: BoxDecoration(color: Colors.grey.shade100),
-        child: NoteList(widget.notes, _updateNotesList),
+        child: NoteList(
+          notes: widget.notes,
+          update: _updateNotesList,
+          onNoteTap: _onNoteTap,
+        ),
       ),
       bottomNavigationBar: CustomNavigationBar(
         level: widget.level,

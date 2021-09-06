@@ -9,12 +9,19 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart' as Logging;
 import 'package:path_provider/path_provider.dart';
 
+enum PageType { newNote, editNote }
+
 class EditNoteRoute extends StatefulWidget {
   final dbHandler = DBHandler();
   late final Note note;
+  final PageType pageType;
   late final Function updateNotesList;
 
-  EditNoteRoute(int id, this.updateNotesList) {
+  EditNoteRoute({
+    required int id,
+    required this.pageType,
+    required this.updateNotesList,
+  }) {
     note = DBHandler().getNoteById(id);
   }
 
@@ -61,13 +68,20 @@ class _EditNoteRoute extends State<EditNoteRoute> {
   Widget build(BuildContext context) {
     appbarActionOval.level = widget.note.level;
     appbarActionOval.updateLevel = _updateNoteLevel;
+
+    noteTitleFieldController.text = widget.note.title;
+    noteTextFieldController.text = widget.note.text;
+
+    final appbarTitle = widget.pageType == PageType.newNote
+        ? 'Новая заметка'
+        : 'Редактировать';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         brightness: Brightness.light,
         title: Text(
-          'Новая заметка',
+          appbarTitle,
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w500,

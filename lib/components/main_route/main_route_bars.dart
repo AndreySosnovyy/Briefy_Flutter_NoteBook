@@ -42,7 +42,10 @@ class CustomNavigationBar extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => EditNoteRoute(id, updateNotesList),
+              builder: (context) => EditNoteRoute(
+                  id: id,
+                  pageType: PageType.newNote,
+                  updateNotesList: updateNotesList),
             ),
           );
         } else {
