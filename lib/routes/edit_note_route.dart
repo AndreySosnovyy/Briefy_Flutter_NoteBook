@@ -69,12 +69,12 @@ class _EditNoteRoute extends State<EditNoteRoute> {
     appbarActionOval.level = widget.note.level;
     appbarActionOval.updateLevel = _updateNoteLevel;
 
-    noteTitleFieldController.text = widget.note.title;
+    noteTitleFieldController.text =
+        widget.note.title == 'Новая заметка' ? '' : widget.note.title;
     noteTextFieldController.text = widget.note.text;
 
-    final appbarTitle = widget.pageType == PageType.newNote
-        ? 'Новая заметка'
-        : 'Редактировать';
+    final appbarTitle =
+        widget.pageType == PageType.newNote ? 'Новая заметка' : 'Редактировать';
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

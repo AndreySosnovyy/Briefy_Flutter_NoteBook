@@ -1,3 +1,4 @@
+import 'package:briefy/components/main_route/empty_list_icon.dart';
 import 'package:briefy/components/main_route/main_route_bars.dart';
 import 'package:briefy/components/main_route/note_list.dart';
 import 'package:briefy/db_handler.dart';
@@ -10,7 +11,7 @@ import 'edit_note_route.dart';
 class MainRoute extends StatefulWidget {
   final dbHandler = DBHandler();
   var level = Level.red;
-  var notes;
+  List<Note> notes = [];
 
   MainRoute() {
     notes = dbHandler.getNotes(level);
@@ -54,13 +55,18 @@ class _MainRouteState extends State<MainRoute> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(widget.level, [_clearNotesBox]),
-      body: DecoratedBox(
-        decoration: BoxDecoration(color: Colors.grey.shade100),
-        child: NoteList(
-          notes: widget.notes,
-          update: _updateNotesList,
-          onNoteTap: _onNoteTap,
-        ),
+      body: Stack(
+        children: [
+          if (widget.notes.isEmpty) EmptyListIconWidget(),
+          if (widget.notes.isNotEmpty) DecoratedBox(
+            decoration: BoxDecoration(color: Colors.grey.shade100),
+            child: NoteList(
+              notes: widget.notes,
+              update: _updateNotesList,
+              onNoteTap: _onNoteTap,
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: CustomNavigationBar(
         level: widget.level,
