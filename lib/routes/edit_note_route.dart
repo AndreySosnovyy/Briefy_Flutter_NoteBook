@@ -16,6 +16,7 @@ class EditNoteRoute extends StatefulWidget {
   late final Note note;
   final PageType pageType;
   late final Function updateNotesList;
+  var deletingImagesMode = false;
 
   EditNoteRoute({
     required int id,
@@ -109,9 +110,49 @@ class _EditNoteRoute extends State<EditNoteRoute> {
                 itemBuilder: (BuildContext context, int index) => ClipRRect(
                   clipBehavior: Clip.antiAlias,
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.file(
-                    File(widget.note.images[index]),
-                    fit: BoxFit.cover,
+                  child: InkWell(
+                    enableFeedback: false,
+                    splashFactory: NoSplash.splashFactory,
+                    onTap: () {
+                      // todo: показывать изображение во весь экран
+                    },
+                    onLongPress: () =>
+                        setState(() => widget.deletingImagesMode = true),
+                    child: Stack(
+                      children: [
+                        Image.file(
+                          File(widget.note.images[index]),
+                          fit: BoxFit.cover,
+                        ),
+                        if (widget.deletingImagesMode)
+                          Positioned(
+                            top: 5,
+                            right: 5,
+                            child: InkWell(
+                              enableFeedback: false,
+                              splashFactory: NoSplash.splashFactory,
+                              onTap: () {
+                                DBHandler().deleteImage(
+                                    noteId: widget.note.id, imageIndex: index);
+                                setState(() {});
+                              },
+                              child: Container(
+                                width: 42,
+                                height: 42,
+                                decoration: BoxDecoration(
+                                  color: Color(0x96FFFFFF),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Icon(
+                                  Icons.clear,
+                                  size: 36,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ),
                 separatorBuilder: (BuildContext context, int index) =>
@@ -122,6 +163,7 @@ class _EditNoteRoute extends State<EditNoteRoute> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
             child: TextField(
+              onTap: () => setState(() => widget.deletingImagesMode = false),
               controller: noteTitleFieldController,
               onChanged: (text) => _updateTitle(text),
               maxLength: 128,
@@ -146,6 +188,8 @@ class _EditNoteRoute extends State<EditNoteRoute> {
               child: ScrollConfiguration(
                 behavior: NoGlowBehavior(),
                 child: TextField(
+                  onTap: () =>
+                      setState(() => widget.deletingImagesMode = false),
                   controller: noteTextFieldController,
                   onChanged: (text) => _updateText(text),
                   maxLength: 2000,
@@ -183,6 +227,7 @@ class _EditNoteRoute extends State<EditNoteRoute> {
                   ),
                 ),
                 onTap: () {
+                  setState(() => widget.deletingImagesMode = false);
                   FocusScope.of(context).unfocus();
                   AddingBottomSheet.show(
                       context: context, addImage: _addImage, update: _update);

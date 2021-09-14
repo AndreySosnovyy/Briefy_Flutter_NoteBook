@@ -50,6 +50,14 @@ class DBHandler {
     });
   }
 
+  Future<void> deleteImage({required int noteId, required int imageIndex}) async {
+    noteBox.values.forEach((note) {
+      if (note.id == noteId) {
+        note.images.removeAt(imageIndex);
+      }
+    });
+  }
+
   Future<void> clearNotesBox() async {
     var docPath = (await getApplicationDocumentsDirectory()).path;
     Directory(docPath + '/images').list().forEach((image) => image.delete());
