@@ -3,6 +3,7 @@ import 'package:briefy/components/edit_note_route/edit_bottom_sheet.dart';
 import 'package:briefy/components/edit_note_route/appbar_action_oval.dart';
 import 'package:briefy/db_handler.dart';
 import 'package:briefy/model/note.dart';
+import 'package:briefy/routes/full_sreen_image_route.dart';
 import 'package:briefy/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -113,16 +114,28 @@ class _EditNoteRoute extends State<EditNoteRoute> {
                   child: InkWell(
                     enableFeedback: false,
                     splashFactory: NoSplash.splashFactory,
-                    onTap: () {
-                      // todo: показывать изображение во весь экран
-                    },
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FullScreenImageRoute(
+                          Image.file(
+                            File(
+                              widget.note.images[index],
+                            ),
+                          ), 'image$index'
+                        ),
+                      ),
+                    ),
                     onLongPress: () =>
                         setState(() => widget.deletingImagesMode = true),
                     child: Stack(
                       children: [
-                        Image.file(
-                          File(widget.note.images[index]),
-                          fit: BoxFit.cover,
+                        Hero(
+                          tag: 'image$index',
+                          child: Image.file(
+                            File(widget.note.images[index]),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                         if (widget.deletingImagesMode)
                           Positioned(
@@ -133,7 +146,8 @@ class _EditNoteRoute extends State<EditNoteRoute> {
                               splashFactory: NoSplash.splashFactory,
                               onTap: () {
                                 DBHandler().deleteImage(
-                                    noteId: widget.note.id, imageIndex: index);
+                                    noteId: widget.note.id,
+                                    imageIndex: index);
                                 setState(() {});
                               },
                               child: Container(
