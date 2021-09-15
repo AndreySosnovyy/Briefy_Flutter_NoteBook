@@ -84,10 +84,10 @@ class CustomNavigationBar extends StatelessWidget {
   }
 }
 
-class CustomAppBar extends AppBar {
+class MainAppBar extends AppBar {
   final Level level;
 
-  CustomAppBar(this.level, List<Function> menuFunctions)
+  MainAppBar(this.level, List<Function> menuFunctions)
       : super(
           brightness: Brightness.dark,
           title: Text(

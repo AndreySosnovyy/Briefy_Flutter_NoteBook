@@ -54,7 +54,7 @@ class _MainRouteState extends State<MainRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(widget.level, [_clearNotesBox]),
+      appBar: MainAppBar(widget.level, [_clearNotesBox]),
       body: Stack(
         children: [
           if (widget.notes.isEmpty) EmptyListIconWidget(),

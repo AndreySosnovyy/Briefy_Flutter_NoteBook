@@ -1,6 +1,10 @@
 import 'dart:io';
+import 'package:briefy/components/edit_note_route/edit_appbar.dart';
+import 'package:briefy/components/edit_note_route/edit_bottom_panel.dart';
 import 'package:briefy/components/edit_note_route/edit_bottom_sheet.dart';
 import 'package:briefy/components/edit_note_route/appbar_action_oval.dart';
+import 'package:briefy/components/edit_note_route/edit_images_block.dart';
+import 'package:briefy/components/edit_note_route/edit_textfields.dart';
 import 'package:briefy/db_handler.dart';
 import 'package:briefy/model/note.dart';
 import 'package:briefy/routes/full_sreen_image_route.dart';
@@ -54,6 +58,8 @@ class _EditNoteRoute extends State<EditNoteRoute> {
 
   void _updateText(String text) => widget.note.text = text;
 
+  void _setDeletingImagesMode(bool mode) => widget.deletingImagesMode = mode;
+
   var appbarActionOval = AppbarActionOval();
   var noteTitleFieldController = TextEditingController();
   var noteTextFieldController = TextEditingController();
@@ -77,122 +83,28 @@ class _EditNoteRoute extends State<EditNoteRoute> {
 
     final appbarTitle =
         widget.pageType == PageType.newNote ? 'Новая заметка' : 'Редактировать';
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black),
-        brightness: Brightness.light,
-        title: Text(
-          appbarTitle,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          appbarActionOval,
-          SizedBox(width: 14),
-        ],
-      ),
+      appBar: EditAppbar(appbarTitle, appbarActionOval),
       body: Column(
         children: [
           SizedBox(height: 20),
           // ~~~~~~~~~~~~~~~~~ блок картинок ~~~~~~~~~~~~~~~~~
           if (widget.note.images.isNotEmpty)
-            Container(
-              height: 140,
-              margin: EdgeInsets.fromLTRB(16, 0, 16, 10),
-              child: ListView.separated(
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: widget.note.images.length,
-                itemBuilder: (BuildContext context, int index) => ClipRRect(
-                  clipBehavior: Clip.antiAlias,
-                  borderRadius: BorderRadius.circular(10),
-                  child: InkWell(
-                    enableFeedback: false,
-                    splashFactory: NoSplash.splashFactory,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FullScreenImageRoute(
-                          Image.file(
-                            File(
-                              widget.note.images[index],
-                            ),
-                          ), 'image$index'
-                        ),
-                      ),
-                    ),
-                    onLongPress: () =>
-                        setState(() => widget.deletingImagesMode = true),
-                    child: Stack(
-                      children: [
-                        Hero(
-                          tag: 'image$index',
-                          child: Image.file(
-                            File(widget.note.images[index]),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        if (widget.deletingImagesMode)
-                          Positioned(
-                            top: 5,
-                            right: 5,
-                            child: InkWell(
-                              enableFeedback: false,
-                              splashFactory: NoSplash.splashFactory,
-                              onTap: () {
-                                DBHandler().deleteImage(
-                                    noteId: widget.note.id,
-                                    imageIndex: index);
-                                setState(() {});
-                              },
-                              child: Container(
-                                width: 42,
-                                height: 42,
-                                decoration: BoxDecoration(
-                                  color: Color(0x96FFFFFF),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.clear,
-                                  size: 36,
-                                  color: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-                separatorBuilder: (BuildContext context, int index) =>
-                    SizedBox(width: 10),
-              ),
+            ImagesBlock(
+              note: widget.note,
+              deletingImagesMode: widget.deletingImagesMode,
+              setDeletingImagesMode: _setDeletingImagesMode,
+              update: _update,
             ),
           // ~~~~~~~~~~~~~~~~~ поле заголовка ~~~~~~~~~~~~~~~~~
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
-            child: TextField(
-              onTap: () => setState(() => widget.deletingImagesMode = false),
+            child: NoteTitleTextField(
               controller: noteTitleFieldController,
-              onChanged: (text) => _updateTitle(text),
-              maxLength: 128,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: InputDecoration(
-                isDense: true,
-                contentPadding: EdgeInsets.symmetric(vertical: 4.0),
-                counterText: '',
-                border: InputBorder.none,
-                hintText: 'Название',
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
+              setDeletingImagesMode: _setDeletingImagesMode,
+              update: _update,
+              updateTitle: _updateTitle,
             ),
           ),
           // ~~~~~~~~~~~~~~~~~ поле текста ~~~~~~~~~~~~~~~~~
@@ -201,22 +113,11 @@ class _EditNoteRoute extends State<EditNoteRoute> {
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: ScrollConfiguration(
                 behavior: NoGlowBehavior(),
-                child: TextField(
-                  onTap: () =>
-                      setState(() => widget.deletingImagesMode = false),
+                child: NoteTextTextField(
                   controller: noteTextFieldController,
-                  onChanged: (text) => _updateText(text),
-                  maxLength: 2000,
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    counterText: '',
-                    border: InputBorder.none,
-                    hintText: 'Текст',
-                    hintStyle: TextStyle(color: Colors.grey),
-                  ),
+                  setDeletingImagesMode: _setDeletingImagesMode,
+                  update: _update,
+                  updateText: _updateText,
                 ),
               ),
             ),
@@ -224,59 +125,13 @@ class _EditNoteRoute extends State<EditNoteRoute> {
           // ~~~~~~~~~~~~~~~~~ панель тегов ~~~~~~~~~~~~~~~~~
           // добавить теги (pub.dev)
           // ~~~~~~~~~~~~~~~~~ нижняя панель ~~~~~~~~~~~~~~~~~
-          Row(
-            children: [
-              InkWell(
-                enableFeedback: false,
-                splashFactory: NoSplash.splashFactory,
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  child: Center(
-                    child: Icon(
-                      Icons.add_circle_outline,
-                      color: Colors.grey[700],
-                      size: 28,
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  setState(() => widget.deletingImagesMode = false);
-                  FocusScope.of(context).unfocus();
-                  AddingBottomSheet.show(
-                      context: context, addImage: _addImage, update: _update);
-                },
-              ),
-              Expanded(
-                child: Center(
-                  child: Text(
-                    'Последнее изменение\n${Utils.editedTimeToString(widget.note.edited)}',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-              ),
-              InkWell(
-                enableFeedback: false,
-                splashFactory: NoSplash.splashFactory,
-                child: Container(
-                  width: 50,
-                  height: 50,
-                  child: Center(
-                    child: Icon(
-                      Icons.more_vert,
-                      color: Colors.grey[700],
-                      size: 28,
-                    ),
-                  ),
-                ),
-                onTap: () {},
-              ),
-            ],
-          ),
+          EditBottomPanel(
+            context: context,
+            note: widget.note,
+            setDeletingImagesMode: _setDeletingImagesMode,
+            update: _update,
+            addImage: _addImage,
+          )
         ],
       ),
     );
