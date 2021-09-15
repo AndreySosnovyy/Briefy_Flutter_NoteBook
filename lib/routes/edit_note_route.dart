@@ -89,14 +89,6 @@ class _EditNoteRoute extends State<EditNoteRoute> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          // ~~~~~~~~~~~~~~~~~ блок картинок ~~~~~~~~~~~~~~~~~
-          if (widget.note.images.isNotEmpty)
-            ImagesBlock(
-              note: widget.note,
-              deletingImagesMode: widget.deletingImagesMode,
-              setDeletingImagesMode: _setDeletingImagesMode,
-              update: _update,
-            ),
           // ~~~~~~~~~~~~~~~~~ поле заголовка ~~~~~~~~~~~~~~~~~
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16),
@@ -107,6 +99,15 @@ class _EditNoteRoute extends State<EditNoteRoute> {
               updateTitle: _updateTitle,
             ),
           ),
+          // ~~~~~~~~~~~~~~~~~ блок картинок ~~~~~~~~~~~~~~~~~
+          if (widget.note.images.isNotEmpty) SizedBox(height: 16),
+          if (widget.note.images.isNotEmpty)
+            ImagesBlock(
+              note: widget.note,
+              deletingImagesMode: widget.deletingImagesMode,
+              setDeletingImagesMode: _setDeletingImagesMode,
+              update: _update,
+            ),
           // ~~~~~~~~~~~~~~~~~ поле текста ~~~~~~~~~~~~~~~~~
           Expanded(
             child: Container(

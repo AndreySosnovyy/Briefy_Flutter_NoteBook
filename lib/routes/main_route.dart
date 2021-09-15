@@ -64,6 +64,7 @@ class _MainRouteState extends State<MainRoute> {
               notes: widget.notes,
               update: _updateNotesList,
               onNoteTap: _onNoteTap,
+              context: context,
             ),
           ),
         ],

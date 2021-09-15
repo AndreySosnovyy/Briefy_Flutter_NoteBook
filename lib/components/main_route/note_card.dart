@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:briefy/db_handler.dart';
 import 'package:briefy/model/note.dart';
+import 'package:briefy/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,16 +9,33 @@ class NoteCard extends StatelessWidget {
   final Note note;
   Function update;
   Function onNoteTap;
+  final context;
 
   NoteCard({
     required this.note,
     required this.update,
     required this.onNoteTap,
+    required this.context,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
+    final snackBar = SnackBar(
+      content: Text('Отменить удаление?'),
+      duration: Duration(seconds: 4),
+      action: SnackBarAction(
+        label: 'Да',
+        onPressed: () {
+          Note note = DeletedNotesBuffer().get();
+          DBHandler().addNote(note);
+          update();
+        },
+      ),
+    );
+
     return InkWell(
+      enableFeedback: false,
+      splashFactory: NoSplash.splashFactory,
       onTap: () => onNoteTap(note.id),
       child: Card(
         shape: RoundedRectangleBorder(
@@ -50,30 +68,33 @@ class NoteCard extends StatelessWidget {
                       onSelected: (int value) async {
                         switch (value) {
                           case 0:
-                          // todo: удалять заметку с анимацией
+                            // todo: удалять заметку с анимацией
                             await DBHandler().deleteNote(note.id);
                             update();
+                            DeletedNotesBuffer().add(note);
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
                             break;
                         }
                       },
-                      itemBuilder: (context) =>
-                      [
-                        PopupMenuItem(
-                          child: Row(
-                            children: [
-                              Icon(Icons.delete_outline, color: Colors.black),
-                              SizedBox(width: 6),
-                              Text("Удалить заметку"),
-                            ],
-                          ),
-                          value: 0,
-                        ),
-                      ]),
+                      itemBuilder: (context) => [
+                            PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  Icon(Icons.delete_outline,
+                                      color: Colors.black),
+                                  SizedBox(width: 6),
+                                  Text("Удалить заметку"),
+                                ],
+                              ),
+                              value: 0,
+                            ),
+                          ]),
                 ],
               ),
             ),
             if (note.images.length > 0)
-            // ~~~~~~~~~~~ блок картинок ~~~~~~~~~~~
+              // ~~~~~~~~~~~ блок картинок ~~~~~~~~~~~
               Container(
                 height: 140,
                 margin: EdgeInsets.fromLTRB(16, 0, 16, 10),
@@ -81,21 +102,20 @@ class NoteCard extends StatelessWidget {
                   physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: note.images.length,
-                  itemBuilder: (BuildContext context, int index) =>
-                      ClipRRect(
-                        clipBehavior: Clip.antiAlias,
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.file(
-                          File(note.images[index]),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                  itemBuilder: (BuildContext context, int index) => ClipRRect(
+                    clipBehavior: Clip.antiAlias,
+                    borderRadius: BorderRadius.circular(10),
+                    child: Image.file(
+                      File(note.images[index]),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                   separatorBuilder: (BuildContext context, int index) =>
                       SizedBox(width: 10),
                 ),
               ),
             if (note.text.isNotEmpty)
-            // ~~~~~~~~~~~ блок текста ~~~~~~~~~~~
+              // ~~~~~~~~~~~ блок текста ~~~~~~~~~~~
               Container(
                 margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
                 child: Text(

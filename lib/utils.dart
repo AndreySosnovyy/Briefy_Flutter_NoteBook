@@ -49,10 +49,14 @@ class Utils {
 
   static Level getLevelByIndex(int index) {
     switch (index) {
-      case 0: return Level.red;
-      case 1: return Level.yellow;
-      case 2: return Level.green;
-      default: throw Exception('Wrong index provided');
+      case 0:
+        return Level.red;
+      case 1:
+        return Level.yellow;
+      case 2:
+        return Level.green;
+      default:
+        throw Exception('Wrong index provided');
     }
   }
 
@@ -68,22 +72,35 @@ class Utils {
   }
 
   static String getMonthByNumber(int month) {
-    switch(month) {
-      case 1:  return 'января';
-      case 2:  return 'февраля';
-      case 3:  return 'марта';
-      case 4:  return 'апреля';
-      case 5:  return 'мая';
-      case 6:  return 'июня';
-      case 7:  return 'июля';
-      case 8:  return 'августа';
-      case 9:  return 'сентября';
-      case 10: return 'октября';
-      case 11: return 'ноября';
-      case 12: return 'декабря';
-      default: throw Exception('Invalid month provided');
+    switch (month) {
+      case 1:
+        return 'января';
+      case 2:
+        return 'февраля';
+      case 3:
+        return 'марта';
+      case 4:
+        return 'апреля';
+      case 5:
+        return 'мая';
+      case 6:
+        return 'июня';
+      case 7:
+        return 'июля';
+      case 8:
+        return 'августа';
+      case 9:
+        return 'сентября';
+      case 10:
+        return 'октября';
+      case 11:
+        return 'ноября';
+      case 12:
+        return 'декабря';
+      default:
+        throw Exception('Invalid month provided');
     }
-}
+  }
 
   static String editedTimeToString(DateTime edited) {
     edited = edited.toLocal();
@@ -112,4 +129,18 @@ class Utils {
       return newFile;
     }
   }
+}
+
+class DeletedNotesBuffer {
+  static List<Note> _notesList = [];
+  final _safeTime = Duration(seconds: 5);
+
+  void _delayedRemoval() => Future.delayed(_safeTime, () => _notesList = []);
+
+  void add(Note note) {
+    _notesList.add(note);
+    _delayedRemoval();
+  }
+
+  Note get() => _notesList.single;
 }

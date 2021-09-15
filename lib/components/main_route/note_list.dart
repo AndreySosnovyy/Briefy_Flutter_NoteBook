@@ -7,15 +7,17 @@ class NoteList extends StatelessWidget {
   List<Note> notes;
   Function update;
   Function onNoteTap;
+  final context;
 
   NoteList({
     required this.notes,
     required this.update,
     required this.onNoteTap,
+    required this.context,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext _) {
     return Container(
       constraints: BoxConstraints.expand(),
       child: ListView.builder(
@@ -24,7 +26,12 @@ class NoteList extends StatelessWidget {
         padding: EdgeInsets.all(6),
         itemCount: notes.length,
         itemBuilder: (BuildContext context, int index) {
-          return NoteCard(note: notes[index], update: update, onNoteTap: onNoteTap,);
+          return NoteCard(
+            note: notes[index],
+            update: update,
+            onNoteTap: onNoteTap,
+            context: context,
+          );
         },
       ),
     );
