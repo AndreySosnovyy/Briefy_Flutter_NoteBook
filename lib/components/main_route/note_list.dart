@@ -8,12 +8,14 @@ class NoteList extends StatelessWidget {
   Function update;
   Function onNoteTap;
   final context;
+  final isColoredNoteCard;
 
   NoteList({
     required this.notes,
     required this.update,
     required this.onNoteTap,
     required this.context,
+    required this.isColoredNoteCard,
   });
 
   @override
@@ -31,6 +33,7 @@ class NoteList extends StatelessWidget {
             update: update,
             onNoteTap: onNoteTap,
             context: context,
+            isColoredNoteCard: isColoredNoteCard,
           );
         },
       ),

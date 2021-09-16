@@ -10,19 +10,23 @@ class NoteCard extends StatelessWidget {
   Function update;
   Function onNoteTap;
   final context;
+  final isColoredNoteCard;
 
   NoteCard({
     required this.note,
     required this.update,
     required this.onNoteTap,
     required this.context,
+    required this.isColoredNoteCard,
   });
 
   @override
   Widget build(BuildContext _) {
+
     final snackBar = SnackBar(
       content: Text('Отменить удаление?'),
       duration: Duration(seconds: 4),
+      backgroundColor: Colors.grey.shade400,
       action: SnackBarAction(
         label: 'Да',
         onPressed: () {

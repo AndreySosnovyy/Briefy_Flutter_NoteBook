@@ -86,15 +86,60 @@ class CustomNavigationBar extends StatelessWidget {
 
 class MainAppBar extends AppBar {
   final Level level;
+  final isSearchingMode;
+  final Function setSearchingMode;
+  final Function update;
 
-  MainAppBar(this.level, List<Function> menuFunctions)
+  MainAppBar(
+      {required this.level,
+      required this.isSearchingMode,
+      required this.setSearchingMode,
+      required List<Function> menuFunctions,
+      required this.update})
       : super(
           brightness: Brightness.dark,
-          title: Text(
-            Constants.appName,
-            style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+          leading: SizedBox(),
+          title: Stack(
+            children: [
+            if (!isSearchingMode) Text(
+              Constants.appName,
+              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+            ),
+              if (isSearchingMode) TextField(
+                autofocus: true,
+                cursorColor: Colors.white,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                ),
+                decoration: new InputDecoration(
+                  hintText: ' Поиск',
+                  hintStyle: TextStyle(
+                    color: Colors.grey.shade200,
+                    fontSize: 18,
+                  ),
+                  border: InputBorder.none,
+                ),
+              ),
+            ]
           ),
           actions: [
+            if (!isSearchingMode)
+              IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  setSearchingMode(!isSearchingMode);
+                  update();
+                },
+              ),
+            if (isSearchingMode)
+              IconButton(
+                icon: Icon(Icons.search_off),
+                onPressed: () {
+                  setSearchingMode(!isSearchingMode);
+                  update();
+                },
+              ),
             PopupMenuButton(
                 icon: Icon(Icons.more_vert),
                 onSelected: (int value) {

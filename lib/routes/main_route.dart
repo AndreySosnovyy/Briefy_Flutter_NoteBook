@@ -12,6 +12,7 @@ class MainRoute extends StatefulWidget {
   final dbHandler = DBHandler();
   var level = Level.red;
   List<Note> notes = [];
+  var isSearchingMode = false;
 
   MainRoute() {
     notes = dbHandler.getNotes(level);
@@ -28,6 +29,8 @@ class _MainRouteState extends State<MainRoute> {
         () => setState(
             () => widget.notes = widget.dbHandler.getNotes(widget.level)));
   }
+
+  void _update() => setState(() {});
 
   void _onNoteTap(int id) {
     Navigator.push(
@@ -51,22 +54,32 @@ class _MainRouteState extends State<MainRoute> {
     setState(() => widget.notes = widget.dbHandler.getNotes(widget.level));
   }
 
+  void _setSearchingMode(bool mode) => widget.isSearchingMode = mode;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MainAppBar(widget.level, [_clearNotesBox]),
+      appBar: MainAppBar(
+        level: widget.level,
+        isSearchingMode: widget.isSearchingMode,
+        setSearchingMode: _setSearchingMode,
+        menuFunctions: [_clearNotesBox],
+        update: _update,
+      ),
       body: Stack(
         children: [
           if (widget.notes.isEmpty) EmptyListIconWidget(),
-          if (widget.notes.isNotEmpty) DecoratedBox(
-            decoration: BoxDecoration(color: Colors.grey.shade100),
-            child: NoteList(
-              notes: widget.notes,
-              update: _updateNotesList,
-              onNoteTap: _onNoteTap,
-              context: context,
+          if (widget.notes.isNotEmpty)
+            DecoratedBox(
+              decoration: BoxDecoration(color: Colors.grey.shade100),
+              child: NoteList(
+                notes: widget.notes,
+                update: _updateNotesList,
+                onNoteTap: _onNoteTap,
+                context: context,
+                isColoredNoteCard: widget.isSearchingMode,
+              ),
             ),
-          ),
         ],
       ),
       bottomNavigationBar: CustomNavigationBar(

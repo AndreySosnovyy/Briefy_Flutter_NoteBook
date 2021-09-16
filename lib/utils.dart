@@ -135,9 +135,10 @@ class DeletedNotesBuffer {
   static List<Note> _notesList = [];
   final _safeTime = Duration(seconds: 5);
 
-  void _delayedRemoval() => Future.delayed(_safeTime, () => _notesList = []);
+  void _delayedRemoval() => Future.delayed(_safeTime, () => _notesList.clear());
 
   void add(Note note) {
+    _notesList.clear();
     _notesList.add(note);
     _delayedRemoval();
   }
