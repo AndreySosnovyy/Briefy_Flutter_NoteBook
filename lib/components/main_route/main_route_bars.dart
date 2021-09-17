@@ -11,12 +11,14 @@ class CustomNavigationBar extends StatelessWidget {
   final BuildContext context;
   final Function changeLevel;
   final Function updateNotesList;
+  final Function setSearchMode;
 
   CustomNavigationBar({
     required this.level,
     required this.context,
     required this.changeLevel,
     required this.updateNotesList,
+    required this.setSearchMode,
   });
 
   @override
@@ -43,9 +45,11 @@ class CustomNavigationBar extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => EditNoteRoute(
-                  id: id,
-                  pageType: PageType.newNote,
-                  updateNotesList: updateNotesList),
+                id: id,
+                pageType: PageType.newNote,
+                updateNotesList: updateNotesList,
+                setSearchMode: setSearchMode,
+              ),
             ),
           );
         } else {
@@ -89,23 +93,28 @@ class MainAppBar extends AppBar {
   final isSearchingMode;
   final Function setSearchingMode;
   final Function update;
+  final Function updateSearchQuery;
 
   MainAppBar(
       {required this.level,
       required this.isSearchingMode,
       required this.setSearchingMode,
       required List<Function> menuFunctions,
-      required this.update})
+      required this.update,
+      required this.updateSearchQuery})
       : super(
           brightness: Brightness.dark,
           leading: SizedBox(),
-          title: Stack(
-            children: [
-            if (!isSearchingMode) Text(
-              Constants.appName,
-              style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
-            ),
-              if (isSearchingMode) TextField(
+          title: Stack(children: [
+            if (!isSearchingMode)
+              Text(
+                Constants.appName,
+                style: TextStyle(fontSize: 26, fontWeight: FontWeight.bold),
+              ),
+            if (isSearchingMode)
+              TextField(
+                onChanged: (String searchQuery) =>
+                    updateSearchQuery(searchQuery),
                 autofocus: true,
                 cursorColor: Colors.white,
                 style: TextStyle(
@@ -121,8 +130,7 @@ class MainAppBar extends AppBar {
                   border: InputBorder.none,
                 ),
               ),
-            ]
-          ),
+          ]),
           actions: [
             if (!isSearchingMode)
               IconButton(

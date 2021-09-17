@@ -42,6 +42,12 @@ class DBHandler {
     }
   }
 
+  List<Note> searchNotes(String query) {
+    return getNotes()
+        .where((note) => note.title.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+
   Future<void> deleteNote(int id) async {
     noteBox.values.forEach((note) {
       if (note.id == id) {
@@ -50,7 +56,8 @@ class DBHandler {
     });
   }
 
-  Future<void> deleteImage({required int noteId, required int imageIndex}) async {
+  Future<void> deleteImage(
+      {required int noteId, required int imageIndex}) async {
     noteBox.values.forEach((note) {
       if (note.id == noteId) {
         note.images.removeAt(imageIndex);

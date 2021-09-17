@@ -22,20 +22,26 @@ class NoteList extends StatelessWidget {
   Widget build(BuildContext _) {
     return Container(
       constraints: BoxConstraints.expand(),
-      child: ListView.builder(
-        physics: BouncingScrollPhysics(),
-        shrinkWrap: true,
-        padding: EdgeInsets.all(6),
-        itemCount: notes.length,
-        itemBuilder: (BuildContext context, int index) {
-          return NoteCard(
-            note: notes[index],
-            update: update,
-            onNoteTap: onNoteTap,
-            context: context,
-            isColoredNoteCard: isColoredNoteCard,
-          );
+      child: NotificationListener<ScrollUpdateNotification>(
+        onNotification: (notification) {
+          FocusScope.of(context).unfocus();
+          return false;
         },
+        child: ListView.builder(
+          physics: BouncingScrollPhysics(),
+          shrinkWrap: true,
+          padding: EdgeInsets.all(6),
+          itemCount: notes.length,
+          itemBuilder: (BuildContext context, int index) {
+            return NoteCard(
+              note: notes[index],
+              update: update,
+              onNoteTap: onNoteTap,
+              context: context,
+              isColoredNoteCard: isColoredNoteCard,
+            );
+          },
+        ),
       ),
     );
   }

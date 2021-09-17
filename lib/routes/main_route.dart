@@ -5,7 +5,6 @@ import 'package:briefy/db_handler.dart';
 import 'package:briefy/model/note.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'edit_note_route.dart';
 
 class MainRoute extends StatefulWidget {
@@ -13,6 +12,7 @@ class MainRoute extends StatefulWidget {
   var level = Level.red;
   List<Note> notes = [];
   var isSearchingMode = false;
+  var searchQuery;
 
   MainRoute() {
     notes = dbHandler.getNotes(level);
@@ -24,22 +24,38 @@ class MainRoute extends StatefulWidget {
 
 class _MainRouteState extends State<MainRoute> {
   void _updateNotesList() {
-    Future.delayed(
-        const Duration(milliseconds: 0),
-        () => setState(
-            () => widget.notes = widget.dbHandler.getNotes(widget.level)));
+
+    if (widget.isSearchingMode) {
+      widget.notes = widget.dbHandler.getNotes();
+      widget.notes.sort((a, b) => a.level.index.compareTo(b.level.index));
+    } else {
+      widget.notes = widget.dbHandler.getNotes(widget.level);
+    }
+
+    Future.delayed(const Duration(milliseconds: 0), () => setState(() {}));
   }
 
-  void _update() => setState(() {});
+  void _update() => setState(() => _updateNotesList());
+
+  void _updateSearchQuery(String searchQuery) {
+    setState(() {
+      if (widget.isSearchingMode) {
+        widget.notes = widget.dbHandler.searchNotes(searchQuery);
+        widget.notes.sort((a, b) => a.level.index.compareTo(b.level.index));
+      }
+    });
+  }
 
   void _onNoteTap(int id) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => EditNoteRoute(
-            id: id,
-            pageType: PageType.editNote,
-            updateNotesList: _updateNotesList),
+          id: id,
+          pageType: PageType.editNote,
+          updateNotesList: _updateNotesList,
+          setSearchMode: _setSearchingMode,
+        ),
       ),
     );
   }
@@ -65,10 +81,12 @@ class _MainRouteState extends State<MainRoute> {
         setSearchingMode: _setSearchingMode,
         menuFunctions: [_clearNotesBox],
         update: _update,
+        updateSearchQuery: _updateSearchQuery,
       ),
       body: Stack(
         children: [
-          if (widget.notes.isEmpty) EmptyListIconWidget(),
+          if (widget.notes.isEmpty && !widget.isSearchingMode)
+            EmptyListIconWidget(),
           if (widget.notes.isNotEmpty)
             DecoratedBox(
               decoration: BoxDecoration(color: Colors.grey.shade100),
@@ -82,12 +100,15 @@ class _MainRouteState extends State<MainRoute> {
             ),
         ],
       ),
-      bottomNavigationBar: CustomNavigationBar(
-        level: widget.level,
-        context: context,
-        changeLevel: _changeLevel,
-        updateNotesList: _updateNotesList,
-      ),
+      bottomNavigationBar: widget.isSearchingMode == false
+          ? CustomNavigationBar(
+              level: widget.level,
+              context: context,
+              changeLevel: _changeLevel,
+              updateNotesList: _updateNotesList,
+              setSearchMode: _setSearchingMode,
+            )
+          : SizedBox(),
     );
   }
 }

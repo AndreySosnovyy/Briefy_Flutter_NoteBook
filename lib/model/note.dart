@@ -2,9 +2,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 part 'note.g.dart';
 
-// todo: добавить дедлайн, после которого переносить заметку на уровень выше
-// todo: добавить теги
-
 @HiveType(typeId: 1)
 enum Level {
   @HiveField(0)
@@ -15,7 +12,9 @@ enum Level {
   green
 }
 
-class NoTitleException {}
+extension on Level {
+  int compareTo(Level other) => this.index.compareTo(other.index);
+}
 
 @HiveType(typeId: 0)
 class Note extends HiveObject {

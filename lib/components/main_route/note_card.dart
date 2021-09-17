@@ -22,6 +22,11 @@ class NoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext _) {
+    var headerTextColor = isColoredNoteCard == true
+        ? Utils.getMainColorByLevel(note.level)
+        : Colors.black;
+    var headerIconColor =
+        isColoredNoteCard == true ? Colors.white : Colors.black54;
 
     final snackBar = SnackBar(
       content: Text('Отменить удаление?'),
@@ -62,13 +67,14 @@ class NoteCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
+                        color: headerTextColor,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   PopupMenuButton(
-                      icon: Icon(Icons.more_vert, color: Colors.black54),
+                      icon: Icon(Icons.more_vert, color: headerIconColor),
                       onSelected: (int value) async {
                         switch (value) {
                           case 0:

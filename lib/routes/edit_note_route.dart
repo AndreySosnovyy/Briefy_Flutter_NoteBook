@@ -20,13 +20,15 @@ class EditNoteRoute extends StatefulWidget {
   final dbHandler = DBHandler();
   late final Note note;
   final PageType pageType;
-  late final Function updateNotesList;
+  final Function updateNotesList;
+  final Function setSearchMode;
   var deletingImagesMode = false;
 
   EditNoteRoute({
     required int id,
     required this.pageType,
     required this.updateNotesList,
+    required this.setSearchMode,
   }) {
     note = DBHandler().getNoteById(id);
   }
@@ -69,6 +71,7 @@ class _EditNoteRoute extends State<EditNoteRoute> {
     _updateEditedTime();
     widget.note.save();
     super.dispose();
+    widget.setSearchMode(false);
     widget.updateNotesList();
   }
 
