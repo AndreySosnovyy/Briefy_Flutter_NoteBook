@@ -52,6 +52,7 @@ class DBHandler {
     noteBox.values.forEach((note) {
       if (note.id == id) {
         note.delete();
+        return;
       }
     });
   }
@@ -61,8 +62,22 @@ class DBHandler {
     noteBox.values.forEach((note) {
       if (note.id == noteId) {
         note.images.removeAt(imageIndex);
+        return;
       }
     });
+  }
+
+  Future<void> pinNote(int noteId) async {
+    var targetNote = noteBox.values.where((note) => note.id == noteId).single;
+    if (targetNote.isPinned == true) {
+      targetNote.isPinned = false;
+      return;
+    } else {
+      noteBox.values.forEach((note) {
+        if (note.level == targetNote.level) note.isPinned = false;
+      });
+      targetNote.isPinned = true;
+    }
   }
 
   Future<void> clearNotesBox() async {

@@ -20,6 +20,13 @@ class NoteList extends StatelessWidget {
 
   @override
   Widget build(BuildContext _) {
+    notes.forEach((note) {
+      if (note.isPinned == true) {
+        notes.remove(note);
+        notes.insert(0, note);
+      }
+    });
+
     return Container(
       constraints: BoxConstraints.expand(),
       child: NotificationListener<ScrollUpdateNotification>(

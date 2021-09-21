@@ -59,9 +59,12 @@ class NoteCard extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisAlignment: MainAxisAlignment.,
                 children: [
-                  Flexible(
+                  if (note.isPinned)
+                    Icon(Icons.push_pin, color: headerIconColor),
+                  if (note.isPinned) SizedBox(width: 10),
+                  Expanded(
                     child: Text(
                       note.title,
                       style: TextStyle(
@@ -73,33 +76,49 @@ class NoteCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
+                  // Spacer(),
                   PopupMenuButton(
-                      icon: Icon(Icons.more_vert, color: headerIconColor),
-                      onSelected: (int value) async {
-                        switch (value) {
-                          case 0:
-                            // todo: удалять заметку с анимацией
-                            await DBHandler().deleteNote(note.id);
-                            update();
-                            DeletedNotesBuffer().add(note);
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackBar);
-                            break;
-                        }
-                      },
-                      itemBuilder: (context) => [
-                            PopupMenuItem(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.delete_outline,
-                                      color: Colors.black),
-                                  SizedBox(width: 6),
-                                  Text("Удалить заметку"),
-                                ],
-                              ),
-                              value: 0,
-                            ),
-                          ]),
+                    icon: Icon(Icons.more_vert, color: headerIconColor),
+                    onSelected: (int value) async {
+                      switch (value) {
+                        case 0:
+                          // todo: удалять заметку с анимацией
+                          await DBHandler().deleteNote(note.id);
+                          update();
+                          DeletedNotesBuffer().add(note);
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          break;
+                        case 1:
+                          await DBHandler().pinNote(note.id);
+                          update();
+                          break;
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      PopupMenuItem(
+                        child: Row(
+                          children: [
+                            Icon(Icons.delete_outline, color: Colors.black),
+                            SizedBox(width: 6),
+                            Text("Удалить заметку"),
+                          ],
+                        ),
+                        value: 0,
+                      ),
+                      PopupMenuItem(
+                        child: Row(
+                          children: [
+                            Icon(Icons.push_pin_outlined, color: Colors.black),
+                            SizedBox(width: 6),
+                            Text(note.isPinned == true
+                                ? 'Открепить'
+                                : 'Закрепить'),
+                          ],
+                        ),
+                        value: 1,
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

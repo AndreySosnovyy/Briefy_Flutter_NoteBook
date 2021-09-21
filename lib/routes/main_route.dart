@@ -24,7 +24,6 @@ class MainRoute extends StatefulWidget {
 
 class _MainRouteState extends State<MainRoute> {
   void _updateNotesList() {
-
     if (widget.isSearchingMode) {
       widget.notes = widget.dbHandler.getNotes();
       widget.notes.sort((a, b) => a.level.index.compareTo(b.level.index));
