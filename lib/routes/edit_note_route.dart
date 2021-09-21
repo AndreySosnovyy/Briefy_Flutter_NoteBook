@@ -69,7 +69,13 @@ class _EditNoteRoute extends State<EditNoteRoute> {
   @override
   void dispose() {
     _updateEditedTime();
-    widget.note.save();
+    if (noteTitleFieldController.text.isNotEmpty ||
+        noteTextFieldController.text.isNotEmpty ||
+        widget.note.images.length != 0) {
+      widget.note.save();
+    } else {
+      DBHandler().deleteNote(widget.note.id);
+    }
     super.dispose();
     widget.setSearchMode(false);
     widget.updateNotesList();

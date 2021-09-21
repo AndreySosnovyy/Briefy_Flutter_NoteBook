@@ -10,13 +10,13 @@ class DBHandler {
 
   factory DBHandler() => _instance;
 
-  Box<Note> noteBox = Hive.box<Note>(Constants.notesBoxName);
+  Box<Note> _noteBox = Hive.box<Note>(Constants.notesBoxName);
 
   DBHandler._internal();
 
   int getNewId() {
     var id = 0;
-    noteBox.values.forEach((note) {
+    _noteBox.values.forEach((note) {
       if (id <= note.id) {
         id = note.id + 1;
       }
@@ -24,11 +24,11 @@ class DBHandler {
     return id;
   }
 
-  Future<void> addNote(Note note) => noteBox.add(note);
+  Future<void> addNote(Note note) => _noteBox.add(note);
 
   Note getNoteById(int id) {
     try {
-      return noteBox.values.where((note) => note.id == id).single;
+      return _noteBox.values.where((note) => note.id == id).single;
     } catch (e) {
       rethrow;
     }
@@ -36,9 +36,9 @@ class DBHandler {
 
   List<Note> getNotes([Level? level]) {
     if (level != null) {
-      return noteBox.values.where((note) => note.level == level).toList();
+      return _noteBox.values.where((note) => note.level == level).toList();
     } else {
-      return noteBox.values.toList();
+      return _noteBox.values.toList();
     }
   }
 
@@ -49,7 +49,7 @@ class DBHandler {
   }
 
   Future<void> deleteNote(int id) async {
-    noteBox.values.forEach((note) {
+    _noteBox.values.forEach((note) {
       if (note.id == id) {
         note.delete();
         return;
@@ -59,7 +59,7 @@ class DBHandler {
 
   Future<void> deleteImage(
       {required int noteId, required int imageIndex}) async {
-    noteBox.values.forEach((note) {
+    _noteBox.values.forEach((note) {
       if (note.id == noteId) {
         note.images.removeAt(imageIndex);
         return;
@@ -68,12 +68,12 @@ class DBHandler {
   }
 
   Future<void> pinNote(int noteId) async {
-    var targetNote = noteBox.values.where((note) => note.id == noteId).single;
+    var targetNote = _noteBox.values.where((note) => note.id == noteId).single;
     if (targetNote.isPinned == true) {
       targetNote.isPinned = false;
       return;
     } else {
-      noteBox.values.forEach((note) {
+      _noteBox.values.forEach((note) {
         if (note.level == targetNote.level) note.isPinned = false;
       });
       targetNote.isPinned = true;
@@ -83,6 +83,6 @@ class DBHandler {
   Future<void> clearNotesBox() async {
     var docPath = (await getApplicationDocumentsDirectory()).path;
     Directory(docPath + '/images').list().forEach((image) => image.delete());
-    await noteBox.clear();
+    await _noteBox.clear();
   }
 }
